@@ -1,0 +1,95 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"4": "create:block/flywheel",
+		"5": "create:block/mechanical_arm",
+		"6": "create:block/elevator_pulley",
+		"9": "warfare:block/mechanical_turret"
+	},
+	"elements": [
+		{
+			"from": [-3, -1, -2],
+			"to": [3, 1, 6],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, -1, 1]},
+			"faces": {
+				"north": {"uv": [6, 13, 8.5, 14], "texture": "#6"},
+				"east": {"uv": [6, 13, 10, 14], "texture": "#6"},
+				"south": {"uv": [6, 13, 8.5, 14], "texture": "#6"},
+				"west": {"uv": [6, 13, 10, 14], "texture": "#6"},
+				"up": {"uv": [0, 0, 6, 7], "texture": "#6"},
+				"down": {"uv": [6, 13, 10, 16], "rotation": 90, "texture": "#6"}
+			}
+		},
+		{
+			"name": "head",
+			"from": [-5, 1, -4],
+			"to": [5, 7, 8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, -1, 2]},
+			"faces": {
+				"north": {"uv": [3, 11, 6, 16], "rotation": 90, "texture": "#5"},
+				"east": {"uv": [6, 0, 0, 3], "texture": "#4"},
+				"south": {"uv": [2.5, 11, 5.5, 16], "rotation": 90, "texture": "#5"},
+				"west": {"uv": [6, 0, 0, 3], "rotation": 180, "texture": "#4"},
+				"up": {"uv": [0, 11, 6, 16], "rotation": 90, "texture": "#5"},
+				"down": {"uv": [0, 11, 6, 16], "rotation": 270, "texture": "#5"}
+			}
+		},
+		{
+			"name": "barrel_right",
+			"from": [2, 3, -10],
+			"to": [4, 5, -4],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, -1, 2]},
+			"faces": {
+				"north": {"uv": [14, 0, 16, 2], "texture": "#9"},
+				"east": {"uv": [0, 0, 6, 2], "texture": "#9"},
+				"south": {"uv": [14, 2, 16, 4], "texture": "#9"},
+				"west": {"uv": [0, 0, 6, 2], "texture": "#9"},
+				"up": {"uv": [0, 0, 6, 2], "rotation": 90, "texture": "#9"},
+				"down": {"uv": [0, 0, 6, 2], "rotation": 90, "texture": "#9"}
+			}
+		},
+		{
+			"name": "barrel_left",
+			"from": [-4, 3, -10],
+			"to": [-2, 5, -4],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, -1, 2]},
+			"faces": {
+				"north": {"uv": [14, 0, 16, 2], "texture": "#9"},
+				"east": {"uv": [0, 0, 6, 2], "texture": "#9"},
+				"south": {"uv": [14, 2, 16, 4], "texture": "#9"},
+				"west": {"uv": [0, 0, 6, 2], "texture": "#9"},
+				"up": {"uv": [0, 0, 6, 2], "rotation": 90, "texture": "#9"},
+				"down": {"uv": [0, 0, 6, 2], "rotation": 90, "texture": "#9"}
+			}
+		},
+		{
+			"name": "nozzle_right",
+			"from": [1.5, 2.5, -16],
+			"to": [4.5, 5.5, -10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, -1, 2]},
+			"faces": {
+				"north": {"uv": [10, 0, 13, 3], "texture": "#9"},
+				"east": {"uv": [13, 0, 16, 6], "rotation": 90, "texture": "#9"},
+				"south": {"uv": [10, 0, 13, 3], "texture": "#9"},
+				"west": {"uv": [13, 0, 16, 6], "rotation": 270, "texture": "#9"},
+				"up": {"uv": [13, 0, 16, 6], "texture": "#9"},
+				"down": {"uv": [13, 0, 16, 6], "rotation": 180, "texture": "#9"}
+			}
+		},
+		{
+			"name": "nozzle_left",
+			"from": [-4.5, 2.5, -16],
+			"to": [-1.5, 5.5, -10],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, -1, 2]},
+			"faces": {
+				"north": {"uv": [10, 0, 13, 3], "texture": "#9"},
+				"east": {"uv": [13, 0, 16, 6], "rotation": 90, "texture": "#9"},
+				"south": {"uv": [10, 0, 13, 3], "texture": "#9"},
+				"west": {"uv": [13, 0, 16, 6], "rotation": 270, "texture": "#9"},
+				"up": {"uv": [13, 0, 16, 6], "texture": "#9"},
+				"down": {"uv": [13, 0, 16, 6], "rotation": 180, "texture": "#9"}
+			}
+		}
+	]
+}
