@@ -32,7 +32,6 @@ public class TurretVisual extends SingleAxisRotatingVisual<TurretBlockEntity> im
 
     // Arm
     private final TransformedInstance arm;
-    private float armAngle = Float.NaN;
 
     // Head
     private final TransformedInstance head;
@@ -70,7 +69,6 @@ public class TurretVisual extends SingleAxisRotatingVisual<TurretBlockEntity> im
         float tick = ctx.partialTick();
 
         this.baseAngle = this.blockEntity.baseAngle.getValue(tick);
-        this.armAngle = this.blockEntity.armAngle.getValue(tick);
         this.headAngle = this.blockEntity.headAngle.getValue(tick);
 
         this.updateRenderer();
@@ -84,7 +82,7 @@ public class TurretVisual extends SingleAxisRotatingVisual<TurretBlockEntity> im
         ArmRenderer.transformBase(tfm, this.baseAngle);
         this.base.setTransform(this.poseStack).setChanged();
 
-        ArmRenderer.transformLowerArm(tfm, this.armAngle);
+        ArmRenderer.transformLowerArm(tfm, 0);
         this.arm.setTransform(this.poseStack).setChanged();
 
         // ArmRenderer.transformHead(tfm, this.headAngle);

@@ -28,7 +28,6 @@ public class TurretBlockEntity extends KineticBlockEntity {
 
     // Client
     public LerpedFloat baseAngle;
-    public LerpedFloat armAngle;
     public LerpedFloat headAngle;
 
     public TurretBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
@@ -38,9 +37,6 @@ public class TurretBlockEntity extends KineticBlockEntity {
 
         this.baseAngle = LerpedFloat.angular();
         this.baseAngle.startWithValue(0);
-
-        this.armAngle = LerpedFloat.angular();
-        this.armAngle.startWithValue(0);
 
         this.headAngle = LerpedFloat.angular();
         this.headAngle.startWithValue(0);
@@ -65,7 +61,7 @@ public class TurretBlockEntity extends KineticBlockEntity {
             if (this.target != null)
                 this.lookAt(this.target.position(), (float) this.target.getBoundingBox().getYsize() / 2, true);
 
-            // this.broadcastDebug("Angles: [ Base: " + this.baseAngle.getValue() + " ; Head: " + this.headAngle.getValue() + " ]");
+            // sqthis.broadcastDebug("Angles: [ Base: " + this.baseAngle.getValue() + " ; Head: " + this.headAngle.getValue() + " ]");
             this.targetRefreshCounter = 5;
         }
     }
