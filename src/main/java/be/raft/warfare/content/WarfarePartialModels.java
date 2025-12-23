@@ -11,7 +11,7 @@ public class WarfarePartialModels {
             // TURRET
             TURRET_COG = AllPartialModels.ARM_COG,
             TURRET_BASE = AllPartialModels.ARM_BASE,
-            TURRET_ARM = AllPartialModels.ARM_LOWER_BODY,
+            TURRET_ARM = block("mechanical_turret/arm"),
             TURRET_HEAD = block("mechanical_turret/head");
 
 

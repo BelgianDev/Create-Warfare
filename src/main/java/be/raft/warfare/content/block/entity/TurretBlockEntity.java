@@ -1,5 +1,6 @@
 package be.raft.warfare.content.block.entity;
 
+import be.raft.warfare.content.block.TurretBlock;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import net.createmod.catnip.animation.LerpedFloat;
 import net.minecraft.core.BlockPos;
@@ -19,10 +20,12 @@ import org.jetbrains.annotations.NotNull;
 
 public class TurretBlockEntity extends KineticBlockEntity {
     private static final int RANGE = 20; // TODO: Replace with a config option.
-    private static final int TURRET_EYE_LEVEL = 1;
+    private static final float TURRET_EYE_LEVEL = 1f;
 
     // Server
-    private final AABB targetingBoundingBox = new AABB(this.getBlockPos()).inflate(RANGE);
+    private final AABB targetingBoundingBox;
+    private final boolean ceilling;
+
     private LivingEntity target;
     private int targetRefreshCounter;
 
@@ -32,6 +35,9 @@ public class TurretBlockEntity extends KineticBlockEntity {
 
     public TurretBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
+
+        this.targetingBoundingBox = this.getTargetingBoundingBox();
+        this.ceilling = state.getValue(TurretBlock.CEILING);
 
         this.targetRefreshCounter = 5;
 
@@ -61,7 +67,7 @@ public class TurretBlockEntity extends KineticBlockEntity {
             if (this.target != null)
                 this.lookAt(this.target.position(), (float) this.target.getBoundingBox().getYsize() / 2, true);
 
-            // sqthis.broadcastDebug("Angles: [ Base: " + this.baseAngle.getValue() + " ; Head: " + this.headAngle.getValue() + " ]");
+            // this.broadcastDebug("Angles: [ Base: " + this.baseAngle.getValue() + " ; Head: " + this.headAngle.getValue() + " ]");
             this.targetRefreshCounter = 5;
         }
     }
@@ -97,9 +103,12 @@ public class TurretBlockEntity extends KineticBlockEntity {
         if (this.level == null)
             return;
 
-        AABB region = AABB.ofSize(this.getBlockPos().getCenter(), RANGE * 2, RANGE * 2, RANGE * 2);
         this.target = this.level.getNearestEntity(LivingEntity.class, TargetingConditions.DEFAULT, null,
-                this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), region);
+                this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), this.targetingBoundingBox);
+    }
+
+    private AABB getTargetingBoundingBox() {
+        return new AABB(this.getBlockPos()).inflate(RANGE);
     }
 
     /**
@@ -117,15 +126,19 @@ public class TurretBlockEntity extends KineticBlockEntity {
         BlockPos turretPos = this.getBlockPos();
 
         double deltaX = position.x() - (turretPos.getX() + 0.5);
-        double deltaY = (position.y() + height) - (turretPos.getY() + TURRET_EYE_LEVEL);
+        double deltaY = (position.y() + height) - (turretPos.getY() + (this.ceilling ? -TURRET_EYE_LEVEL : TURRET_EYE_LEVEL));
         double deltaZ = position.z() - (turretPos.getZ() + 0.5);
 
         double horizontalDelta = (float) Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
 
         float angle = (float) Math.toDegrees(Math.atan2(-deltaX, -deltaZ));
         float pitch = (float) Math.toDegrees(Math.atan2(deltaY, horizontalDelta));
+        pitch = Mth.clamp(pitch, -35, 90); // Stay within bounds of the model
 
-        pitch = Mth.clamp(pitch, -90, 90);
+        if (this.ceilling) { // Invert values for ceilling turrets.
+            angle = -(angle + 180);
+            pitch = -pitch;
+        }
 
         if (this.baseAngle.getValue() == angle && this.headAngle.getValue() == pitch)
             return; // No need to update anything.

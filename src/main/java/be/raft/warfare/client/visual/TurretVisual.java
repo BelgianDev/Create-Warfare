@@ -3,9 +3,7 @@ package be.raft.warfare.client.visual;
 import be.raft.warfare.content.WarfarePartialModels;
 import be.raft.warfare.content.block.TurretBlock;
 import be.raft.warfare.content.block.entity.TurretBlockEntity;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual;
-import com.simibubi.create.content.kinetics.mechanicalArm.ArmRenderer;
 import dev.engine_room.flywheel.api.instance.Instance;
 import dev.engine_room.flywheel.api.visual.DynamicVisual;
 import dev.engine_room.flywheel.api.visualization.VisualizationContext;
@@ -36,7 +34,6 @@ public class TurretVisual extends SingleAxisRotatingVisual<TurretBlockEntity> im
     // Head
     private final TransformedInstance head;
     private float headAngle = Float.NaN;
-
 
     private final List<TransformedInstance> parts;
 
@@ -77,19 +74,19 @@ public class TurretVisual extends SingleAxisRotatingVisual<TurretBlockEntity> im
     private void updateRenderer() {
         this.poseStack.pushPose();
 
-        PoseTransformStack tfm = TransformStack.of(this.poseStack);
+        PoseTransformStack stack = TransformStack.of(this.poseStack);
 
-        ArmRenderer.transformBase(tfm, this.baseAngle);
+        stack.translate(0, 4 / 16d, 0);
+        stack.rotateYDegrees(this.baseAngle);
         this.base.setTransform(this.poseStack).setChanged();
 
-        ArmRenderer.transformLowerArm(tfm, 0);
+        stack.translate(0, 2 / 16d, 0);
+        stack.rotateXDegrees(135);
         this.arm.setTransform(this.poseStack).setChanged();
 
-        // ArmRenderer.transformHead(tfm, this.headAngle);
-
-        tfm.rotateXDegrees(-135);
-        tfm.translate(0, 0.55, 0.4);
-        tfm.rotateXDegrees(this.headAngle);
+        stack.rotateXDegrees(-135);
+        stack.translate(0, 0.55, 0.4);
+        stack.rotateXDegrees(this.headAngle);
         this.head.setTransform(this.poseStack).setChanged();
 
         this.poseStack.popPose();
