@@ -1,6 +1,8 @@
 package be.raft.warfare.content.block.entity;
 
+import be.raft.warfare.content.WarfareEntities;
 import be.raft.warfare.content.block.TurretBlock;
+import be.raft.warfare.content.entity.BulletEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import net.createmod.catnip.animation.LerpedFloat;
 import net.minecraft.core.BlockPos;
@@ -16,6 +18,7 @@ import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
 
@@ -59,8 +62,6 @@ public class TurretBlockEntity extends KineticBlockEntity {
 
         this.ceiling = state.getValue(TurretBlock.CEILING);
         this.targetPosChanged = false;
-
-        this.setLazyTickRate(1);
     }
 
     @Override
@@ -73,7 +74,7 @@ public class TurretBlockEntity extends KineticBlockEntity {
             return; // Prevent any calculation if the turret is not powered at all.
 
         if (this.checkTarget())
-            this.lookAt(this.target.position(), (float) this.target.getBoundingBox().getYsize() / 2, true);
+            this.lookAt(this.target.position(), this.target.getEyeHeight() / 2, true);
 
         boolean aiming = tickMovement();
         if (this.level.isClientSide)
@@ -192,7 +193,15 @@ public class TurretBlockEntity extends KineticBlockEntity {
     }
 
     public void shootTarget() {
-        //broadcastDebug("Shooting!");
+        BulletEntity bullet = new BulletEntity(WarfareEntities.BULLET.get(), this.level);
+
+        bullet.setOwner(null);
+        bullet.setPos(this.getBlockPos().getX() + 0.5, this.getBlockPos().getY() + 2, this.getBlockPos().getZ() + 0.5);
+
+        Vec3 direction = this.target.position().subtract(this.getBlockPos().getCenter()).normalize();
+        bullet.setDeltaMovement(direction.scale(1.5f));
+
+        this.level.addFreshEntity(bullet);
     }
 
     /**

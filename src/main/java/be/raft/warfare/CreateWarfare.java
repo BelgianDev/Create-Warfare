@@ -30,6 +30,7 @@ public class CreateWarfare {
         WarfareBlockEntities.register();
         WarfareBlocks.register();
         WarfareItems.register();
+        WarfareEntities.register();
     }
 
     public static ResourceLocation asLoc(String path) {

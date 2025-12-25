@@ -1,4 +1,4 @@
-package be.raft.warfare.client.renderer;
+package be.raft.warfare.client.renderer.block;
 
 import be.raft.warfare.content.WarfarePartialModels;
 import be.raft.warfare.content.block.entity.TurretBlockEntity;

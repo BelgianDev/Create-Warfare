@@ -1,7 +1,7 @@
 package be.raft.warfare.content;
 
 import be.raft.warfare.CreateWarfare;
-import be.raft.warfare.client.renderer.TurretRenderer;
+import be.raft.warfare.client.renderer.block.TurretRenderer;
 import be.raft.warfare.client.visual.TurretVisual;
 import be.raft.warfare.content.block.entity.TurretBlockEntity;
 import com.simibubi.create.foundation.data.CreateRegistrate;
