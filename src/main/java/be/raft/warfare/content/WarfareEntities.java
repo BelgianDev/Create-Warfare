@@ -10,7 +10,7 @@ import net.minecraft.world.entity.MobCategory;
 public class WarfareEntities {
     private static final CreateRegistrate REGISTRATE = CreateWarfare.REGISTRATE;
 
-    public static final EntityEntry<BulletEntity> BULLET = REGISTRATE.entity("bullet", BulletEntity::new, MobCategory.MISC)
+    public static final EntityEntry<BulletEntity> BULLET = REGISTRATE.<BulletEntity>entity("bullet", BulletEntity::new, MobCategory.MISC)
             .renderer(() -> BulletRenderer::new)
             .properties(builder -> builder
                     .noSummon().noSave()

@@ -193,12 +193,13 @@ public class TurretBlockEntity extends KineticBlockEntity {
     }
 
     public void shootTarget() {
-        BulletEntity bullet = new BulletEntity(WarfareEntities.BULLET.get(), this.level);
+        Vec3 turretPos = this.getBlockPos().getCenter().add(0, 1, 0);
+        BulletEntity bullet = new BulletEntity(WarfareEntities.BULLET.get(), this.level, this.getBlockPos());
 
         bullet.setOwner(null);
-        bullet.setPos(this.getBlockPos().getX() + 0.5, this.getBlockPos().getY() + 2, this.getBlockPos().getZ() + 0.5);
+        bullet.setPos(turretPos);
 
-        Vec3 direction = this.target.position().subtract(this.getBlockPos().getCenter()).normalize();
+        Vec3 direction = this.target.position().subtract(turretPos).normalize();
         bullet.setDeltaMovement(direction.scale(1.5f));
 
         this.level.addFreshEntity(bullet);
