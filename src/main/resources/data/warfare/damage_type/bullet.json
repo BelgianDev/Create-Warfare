@@ -1,5 +1,5 @@
 {
-  "message_id": "warfare.damage_type.bullet",
+  "message_id": "warfare.bullet",
   "scaling": "never",
   "exhaustion": 0.01
 }

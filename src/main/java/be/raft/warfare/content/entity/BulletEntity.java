@@ -2,7 +2,11 @@ package be.raft.warfare.content.entity;
 
 import be.raft.warfare.content.WarfareDamageTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
+import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.DustParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.damagesource.DamageSource;
@@ -13,14 +17,18 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.EventHooks;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector3f;
 
 public class BulletEntity extends Projectile {
+    private static final byte SPAWN_PARTICLE_ID = 0x01;
+
     private final BlockPos turretPos;
 
     public BulletEntity(EntityType<BulletEntity> type, Level level) {
@@ -50,7 +58,7 @@ public class BulletEntity extends Projectile {
         if (result.getType() != HitResult.Type.MISS)
             end = result.getLocation();
 
-        EntityHitResult entityResult = ProjectileUtil.getEntityHitResult(this.level(), this, start, end, this.getBoundingBox().inflate(1.0), this::canHitEntity);
+        EntityHitResult entityResult = ProjectileUtil.getEntityHitResult(this.level(), this, start, end, this.getBoundingBox().inflate(2.0), this::canHitEntity);
         if (entityResult != null)
             result = entityResult;
 
@@ -64,6 +72,7 @@ public class BulletEntity extends Projectile {
             return;
         }
 
+        this.level().broadcastEntityEvent(this, SPAWN_PARTICLE_ID);
         switch (result) {
             case BlockHitResult blockRes -> this.onHitBlock(blockRes);
             case EntityHitResult entityRes -> this.onHitEntity(entityRes);
@@ -96,11 +105,18 @@ public class BulletEntity extends Projectile {
 
     @Override
     protected void onHitBlock(@NotNull BlockHitResult result) {
-
     }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.@NotNull Builder builder) {
 
+    }
+
+    @Override
+    public void handleEntityEvent(byte id) {
+        if (id != SPAWN_PARTICLE_ID)
+            return;
+
+        this.level().addParticle(ParticleTypes.SMALL_GUST, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
     }
 }
