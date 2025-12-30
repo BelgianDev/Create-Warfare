@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "ceiling=false": {
+      "model": "warfare:block/mechanical_turret/block"
+    },
+    "ceiling=true": {
+      "model": "warfare:block/mechanical_turret/block",
+      "x": 180
+    }
+  }
+}

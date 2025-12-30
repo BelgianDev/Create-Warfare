@@ -25,10 +25,11 @@ public class WarfareBlocks {
             .blockstate((ctx, provider) -> provider.getVariantBuilder(ctx.get())
                     .forAllStates(state -> ConfiguredModel.builder()
                             .modelFile(AssetLookup.partialBaseModel(ctx, provider))
-                            .rotationX(state.getValue(ArmBlock.CEILING) ? 180 : 0)
+                            .rotationX(state.getValue(TurretBlock.CEILING) ? 180 : 0)
                             .build()
                     )
             )
+            .transform(CStress.setImpact(2.0F))
             .item(BlockItem::new)
             .transform(customItemModel())
             .register();

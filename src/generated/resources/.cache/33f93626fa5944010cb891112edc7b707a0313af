@@ -1,0 +1,8 @@
+// 1.21.1	2025-12-30T17:56:39.443886255	Registrate Provider for warfare [Registries, Data Maps, Recipes, Advancements, Loot Tables, Tags (blocks), Tags (enchantments), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider]
+bbb9121228cb44011c661e7d3d927ff42c66f88b assets/warfare/blockstates/mechanical_turret.json
+34372442f13c6ce0c84faa182c77675e97738598 assets/warfare/lang/en_ud.json
+822001816d833f556339337a95004eba106ca139 assets/warfare/lang/en_us.json
+ebca13432e893322009d5e7fdaffbadcd289ef19 assets/warfare/models/item/mechanical_turret.json
+5408d310a31319d99eed1f0728df0be6b54873d2 data/minecraft/tags/block/mineable/axe.json
+5408d310a31319d99eed1f0728df0be6b54873d2 data/minecraft/tags/block/mineable/pickaxe.json
+2908db8a299c25253b14333cff5e66397473d7b7 data/warfare/loot_table/blocks/mechanical_turret.json

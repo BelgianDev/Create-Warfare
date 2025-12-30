@@ -25,8 +25,8 @@ import org.jetbrains.annotations.NotNull;
 public class TurretBlockEntity extends KineticBlockEntity {
     private static final int RANGE = 20; // TODO: Replace with a config option.
     private static final float SPEED_MODIFIER = 0.005f; // TODO: Replace with a config option.
+    private static final int TARGET_REFRESH_RATE = 4 * 20; // TODO: Replace with a config option.
 
-    private static final int TARGET_REFRESH_RATE = 4 * 20;
     private static final float TURRET_EYE_LEVEL = 1f;
 
     // Server
@@ -88,8 +88,6 @@ public class TurretBlockEntity extends KineticBlockEntity {
             this.lookForTarget();
             this.targetRefreshCounter = TARGET_REFRESH_RATE;
         }
-
-        this.broadcastDebug("Angles: [ Base: " + Math.round(this.baseAngle.getValue()) + " ; Head: " + Math.round(this.headAngle.getValue()) + " ; Firing: " + aiming + "]");
     }
 
 
@@ -201,17 +199,13 @@ public class TurretBlockEntity extends KineticBlockEntity {
         double deltaY = targetY - firePoint.y;
         double deltaZ = this.target.getZ() - firePoint.z;
 
-        double distance = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ) * 0.2F;
+        BulletEntity bullet = new BulletEntity(WarfareEntities.BULLET.get(), this.level, this.getBlockPos());
 
-        for (int i = 0; i < 2; i++) {
-            BulletEntity bullet = new BulletEntity(WarfareEntities.BULLET.get(), this.level, this.getBlockPos());
+        bullet.setOwner(null);
+        bullet.setPos(firePoint);
+        bullet.shoot(deltaX, deltaY, deltaZ, 1.6F, 5F);
 
-            bullet.setOwner(null);
-            bullet.setPos(firePoint);
-            bullet.shoot(deltaX, deltaY, deltaZ, 1.6F, 5F);
-
-            this.level.addFreshEntity(bullet);
-        }
+        this.level.addFreshEntity(bullet);
     }
 
     /**

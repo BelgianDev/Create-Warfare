@@ -100,7 +100,7 @@ public class BulletEntity extends Projectile {
         LivingEntity entity = (LivingEntity) result.getEntity();
         DamageSource source = new DamageSource(WarfareDamageTypes.createHolder(this.level().registryAccess(), WarfareDamageTypes.BULLET_DAMAGE), this.turretPos.getCenter());
 
-        entity.hurt(source, 0.1f);
+        entity.hurt(source, 0.5f);
     }
 
     @Override
