@@ -29,7 +29,6 @@ public class WarfareBlocks {
                             .build()
                     )
             )
-            .transform(CStress.setImpact(2.0F))
             .item(BlockItem::new)
             .transform(customItemModel())
             .register();

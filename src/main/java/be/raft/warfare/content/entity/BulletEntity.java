@@ -1,14 +1,11 @@
 package be.raft.warfare.content.entity;
 
 import be.raft.warfare.content.WarfareDamageTypes;
+import be.raft.warfare.network.S2C.BulletImpactPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Position;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -17,17 +14,16 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.EventHooks;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3f;
 
 public class BulletEntity extends Projectile {
-    private static final byte SPAWN_PARTICLE_ID = 0x01;
+    private static final byte BULLET_HIT = 0x01;
 
     private final BlockPos turretPos;
 
@@ -45,11 +41,6 @@ public class BulletEntity extends Projectile {
     public void tick() {
         super.tick();
 
-        if (this.level().isClientSide) {
-            this.updatePos();
-            return;
-        }
-
         Vec3 start = this.position();
         Vec3 end = start.add(this.getDeltaMovement());
 
@@ -58,7 +49,7 @@ public class BulletEntity extends Projectile {
         if (result.getType() != HitResult.Type.MISS)
             end = result.getLocation();
 
-        EntityHitResult entityResult = ProjectileUtil.getEntityHitResult(this.level(), this, start, end, this.getBoundingBox().inflate(2.0), this::canHitEntity);
+        EntityHitResult entityResult = ProjectileUtil.getEntityHitResult(this.level(), this, start, end, this.getBoundingBox().inflate(2), this::canHitEntity);
         if (entityResult != null)
             result = entityResult;
 
@@ -72,7 +63,7 @@ public class BulletEntity extends Projectile {
             return;
         }
 
-        this.level().broadcastEntityEvent(this, SPAWN_PARTICLE_ID);
+        // this.level().broadcastEntityEvent(this, SPAWN_PARTICLE_ID);
         switch (result) {
             case BlockHitResult blockRes -> this.onHitBlock(blockRes);
             case EntityHitResult entityRes -> this.onHitEntity(entityRes);
@@ -97,6 +88,9 @@ public class BulletEntity extends Projectile {
 
     @Override
     protected void onHitEntity(@NotNull EntityHitResult result) {
+        if (this.level().isClientSide)
+            return;
+
         LivingEntity entity = (LivingEntity) result.getEntity();
         DamageSource source = new DamageSource(WarfareDamageTypes.createHolder(this.level().registryAccess(), WarfareDamageTypes.BULLET_DAMAGE), this.turretPos.getCenter());
 
@@ -105,18 +99,22 @@ public class BulletEntity extends Projectile {
 
     @Override
     protected void onHitBlock(@NotNull BlockHitResult result) {
+        if (this.level().isClientSide)
+            return;
+
+        BlockPos pos = result.getBlockPos();
+        Vec3 hitVec = result.getLocation().subtract(pos.getX(), pos.getY(), pos.getZ());
+        Direction face = result.getDirection();
+
+        float faceX = (float) (face.getAxis() == Direction.Axis.X ? hitVec.y : hitVec.x);
+        float faceY = (float) (face.getAxis() == Direction.Axis.Z ? hitVec.y : hitVec.z);
+
+        BulletImpactPacket packet = new BulletImpactPacket(pos, face, faceX, faceY);
+        PacketDistributor.sendToPlayersTrackingChunk((ServerLevel) this.level(), this.level().getChunkAt(result.getBlockPos()).getPos(), packet);
     }
 
     @Override
     protected void defineSynchedData(SynchedEntityData.@NotNull Builder builder) {
 
-    }
-
-    @Override
-    public void handleEntityEvent(byte id) {
-        if (id != SPAWN_PARTICLE_ID)
-            return;
-
-        this.level().addParticle(ParticleTypes.SMALL_GUST, this.getX(), this.getY(), this.getZ(), 0.0D, 0.0D, 0.0D);
     }
 }

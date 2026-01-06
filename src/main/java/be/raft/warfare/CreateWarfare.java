@@ -1,6 +1,7 @@
 package be.raft.warfare;
 
 import be.raft.warfare.content.*;
+import be.raft.warfare.network.WarfareNetworking;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
@@ -10,6 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +36,8 @@ public class CreateWarfare {
         WarfareBlocks.register();
         WarfareItems.register();
         WarfareEntities.register();
+
+        bus.addListener(RegisterPayloadHandlersEvent.class, event -> WarfareNetworking.register(event, container));
     }
 
     public static ResourceLocation asLoc(String path) {
