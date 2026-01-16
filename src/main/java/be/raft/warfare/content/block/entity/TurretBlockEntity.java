@@ -1,15 +1,26 @@
 package be.raft.warfare.content.block.entity;
 
+import be.raft.warfare.content.WarfareIcons;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Predicate;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
+import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.INamedIconOptions;
+import com.simibubi.create.foundation.blockEntity.behaviour.scrollValue.ScrollOptionBehaviour;
+import com.simibubi.create.foundation.gui.AllIcons;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Position;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -35,8 +46,9 @@ import java.util.List;
  */
 public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticBlockEntity {
     private static final int TARGET_REFRESH_RATE = 4 * 20; // TODO: Replace with a config option.
-
     private static final int DEFAULT_CLIENT_REFRESH_RATE = 5 * 20;
+
+    protected ScrollOptionBehaviour<TargetingMode> targetingMode;
 
     // Server
     private int targetRefreshCounter;
@@ -62,6 +74,18 @@ public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticB
         this.clientRefreshCounter = this.clientRefreshRate;
 
         this.targetChanged = false;
+
+    }
+
+    @Override
+    public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
+        super.addBehaviours(behaviours);
+        this.targetingMode = new ScrollOptionBehaviour<>(TargetingMode.class,
+                Component.translatable("warfare.ui.turret.targeting_mode"), this, this.targetingBoxTransform());
+
+        this.targetingMode.setValue(2);
+
+        behaviours.add(this.targetingMode);
     }
 
     @Override
@@ -182,6 +206,10 @@ public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticB
         this.clientRefreshCounter = this.clientRefreshRate;
     }
 
+    private boolean isValidTarget(E entity) {
+        return this.targetingMode.get().testEntity(entity) && this.canTarget(entity);
+    }
+
     /**
      * Used to set the rate to which the server will resend the target position to the client.
      * <br><br>
@@ -205,7 +233,7 @@ public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticB
     public void lookForTarget() {
         AABB targetingBoundingBox = this.getTargetingBoundingBox();
 
-        List<E> entities = this.level.getEntitiesOfClass(this.targetClass(), targetingBoundingBox, this::canTarget);
+        List<E> entities = this.level.getEntitiesOfClass(this.targetClass(), targetingBoundingBox, this::isValidTarget);
         E entity = this.level.getNearestEntity(entities, TargetingConditions.DEFAULT, null,
                 this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ());
 
@@ -241,7 +269,7 @@ public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticB
         Preconditions.checkState(!this.level.isClientSide, "Cannot set target on client side!");
         Preconditions.checkNotNull(target, "Target entity cannot be null!");
 
-        if (!this.canTarget(target))
+        if (!this.isValidTarget(target))
             return false;
 
         this.targetRefreshCounter = TARGET_REFRESH_RATE;
@@ -317,7 +345,7 @@ public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticB
         if (this.targetPosition != null)
             return true;
 
-        return this.target != null && this.canTarget(this.target);
+        return this.target != null && this.isValidTarget(this.target);
     }
 
     /**
@@ -392,4 +420,42 @@ public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticB
      * Called when the turret is supposed to shoot the target, this is called on the server and client side!
      */
     public abstract void shoot();
+
+    /**
+     * Used to properly set where the targeting box on the turret should be located.
+     *
+     * @return targeting box transform.
+     */
+    public abstract @NotNull ValueBoxTransform targetingBoxTransform();
+
+    public enum TargetingMode implements INamedIconOptions {
+        ALL(AllIcons.I_WHITELIST, entity -> entity instanceof Mob || entity instanceof Player),
+        PLAYERS(WarfareIcons.PLAYER_HEAD, entity -> entity instanceof Player),
+        MONSTER(WarfareIcons.MONSTER_HEAD, entity -> entity instanceof Monster),
+        PASSIVE(WarfareIcons.MOB_HEAD, entity -> entity instanceof Mob && !(entity instanceof Monster));
+
+        private final String translationKey;
+        private final AllIcons icon;
+        private final Predicate<Entity> entityFilter;
+
+        TargetingMode(AllIcons icon, Predicate<Entity> entityFilter) {
+            this.icon = icon;
+            this.translationKey = "warfare.turret.targeting_mode." + name().toLowerCase();
+            this.entityFilter = entityFilter;
+        }
+
+        @Override
+        public AllIcons getIcon() {
+            return this.icon;
+        }
+
+        @Override
+        public String getTranslationKey() {
+            return this.translationKey;
+        }
+
+        public boolean testEntity(Entity entity) {
+            return this.entityFilter.test(entity);
+        }
+    }
 }

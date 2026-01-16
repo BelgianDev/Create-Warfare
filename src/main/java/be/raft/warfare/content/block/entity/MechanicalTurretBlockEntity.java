@@ -3,15 +3,20 @@ package be.raft.warfare.content.block.entity;
 import be.raft.warfare.content.WarfareEntities;
 import be.raft.warfare.content.block.MechanicalTurretBlock;
 import be.raft.warfare.content.entity.BulletEntity;
+import com.simibubi.create.content.kinetics.mechanicalArm.ArmBlock;
+import com.simibubi.create.foundation.blockEntity.behaviour.CenteredSideValueBoxTransform;
+import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.math.AngleHelper;
+import net.createmod.catnip.math.VecHelper;
 import net.createmod.catnip.theme.Color;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.core.particles.DustParticleOptions;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -202,5 +207,24 @@ public class MechanicalTurretBlockEntity extends TurretBlockEntity<LivingEntity>
         bullet.shoot(deltaX, deltaY, deltaZ, 1.6F, 5F);
 
         this.level.addFreshEntity(bullet);
+    }
+
+    @Override
+    public @NotNull ValueBoxTransform targetingBoxTransform() {
+        return new TurretBaseValueBoxTransform();
+    }
+
+    private static class TurretBaseValueBoxTransform extends CenteredSideValueBoxTransform {
+        public TurretBaseValueBoxTransform() {
+            super((blockState, direction) -> !direction.getAxis().isVertical());
+        }
+
+        @Override
+        public Vec3 getLocalOffset(LevelAccessor level, BlockPos pos, BlockState state) {
+            int yPos = state.getValue(MechanicalTurretBlock.CEILING) ? 16 - 3 : 3;
+            Vec3 location = VecHelper.voxelSpace(8, yPos, 15.5);
+            location = VecHelper.rotateCentered(location, AngleHelper.horizontalAngle(getSide()), Direction.Axis.Y);
+            return location;
+        }
     }
 }
