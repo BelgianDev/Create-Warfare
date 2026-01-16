@@ -7,7 +7,7 @@
         "6": "create:block/elevator_pulley",
         "7": "create:block/brass_block",
         "8": "create:block/brass_casing",
-		"9": "warfare:block/mechanical_turret",
+		"9": "warfare:block/mechanical_turret_nozzle",
 		"particle": "create:block/brass_casing"
 	},
 	"elements": [

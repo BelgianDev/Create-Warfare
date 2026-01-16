@@ -1,13 +1,12 @@
 package be.raft.warfare.client.visual;
 
 import be.raft.warfare.content.WarfarePartialModels;
-import be.raft.warfare.content.block.TurretBlock;
-import be.raft.warfare.content.block.entity.TurretBlockEntity;
+import be.raft.warfare.content.block.MechanicalTurretBlock;
+import be.raft.warfare.content.block.entity.MechanicalTurretBlockEntity;
 import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual;
 import dev.engine_room.flywheel.api.instance.Instance;
 import dev.engine_room.flywheel.api.visual.DynamicVisual;
 import dev.engine_room.flywheel.api.visualization.VisualizationContext;
-import dev.engine_room.flywheel.lib.instance.AbstractInstance;
 import dev.engine_room.flywheel.lib.instance.FlatLit;
 import dev.engine_room.flywheel.lib.instance.InstanceTypes;
 import dev.engine_room.flywheel.lib.instance.TransformedInstance;
@@ -20,9 +19,10 @@ import dev.engine_room.flywheel.lib.visual.SimpleDynamicVisual;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class TurretVisual extends SingleAxisRotatingVisual<TurretBlockEntity> implements SimpleDynamicVisual {
+public class TurretVisual extends SingleAxisRotatingVisual<MechanicalTurretBlockEntity> implements SimpleDynamicVisual {
     private final RecyclingPoseStack poseStack;
     private final boolean ceiling;
+    private final List<TransformedInstance> parts;
 
     // Base
     private final TransformedInstance base;
@@ -35,13 +35,18 @@ public class TurretVisual extends SingleAxisRotatingVisual<TurretBlockEntity> im
     private final TransformedInstance head;
     private float headAngle = Float.NaN;
 
-    private final List<TransformedInstance> parts;
+    // Nozzles
+    private final TransformedInstance nozzleRight;
+    private float nozzleRightScale;
 
-    public TurretVisual(VisualizationContext context, TurretBlockEntity blockEntity, float partialTick) {
+    private final TransformedInstance nozzleLeft;
+    private float nozzleLeftScale;
+
+    public TurretVisual(VisualizationContext context, MechanicalTurretBlockEntity blockEntity, float partialTick) {
         super(context, blockEntity, partialTick, Models.partial(WarfarePartialModels.TURRET_COG));
 
         this.poseStack = new RecyclingPoseStack();
-        this.ceiling = this.blockState.getValue(TurretBlock.CEILING);
+        this.ceiling = this.blockState.getValue(MechanicalTurretBlock.CEILING);
 
         // Load models
         this.base = instancerProvider().instancer(InstanceTypes.TRANSFORMED,
@@ -50,12 +55,18 @@ public class TurretVisual extends SingleAxisRotatingVisual<TurretBlockEntity> im
                 Models.partial(WarfarePartialModels.TURRET_ARM)).createInstance();
         this.head = instancerProvider().instancer(InstanceTypes.TRANSFORMED,
                 Models.partial(WarfarePartialModels.TURRET_HEAD)).createInstance();
+        this.nozzleRight = instancerProvider().instancer(InstanceTypes.TRANSFORMED,
+                Models.partial(WarfarePartialModels.TURRET_NOZZLE)).createInstance();
+        this.nozzleLeft = instancerProvider().instancer(InstanceTypes.TRANSFORMED,
+                Models.partial(WarfarePartialModels.TURRET_NOZZLE)).createInstance();
 
 
-        this.parts = List.of(this.base, this.arm, this.head);
+        this.parts = List.of(this.base, this.arm, this.head, this.nozzleRight, this.nozzleLeft);
+
+
 
         PoseTransformStack tfm = TransformStack.of(this.poseStack);
-        tfm.translate(getVisualPosition());
+        tfm.translate(this.getVisualPosition());
         tfm.center();
 
         if (this.ceiling) tfm.rotateXDegrees(180);
@@ -67,6 +78,9 @@ public class TurretVisual extends SingleAxisRotatingVisual<TurretBlockEntity> im
 
         this.baseAngle = this.blockEntity.baseAngle.getValue(tick);
         this.headAngle = this.blockEntity.headAngle.getValue(tick);
+
+        this.nozzleRightScale = this.blockEntity.nozzleRightScale.getValue(tick);
+        this.nozzleLeftScale = this.blockEntity.nozzleLeftScale.getValue(tick);
 
         this.updateRenderer();
     }
@@ -89,6 +103,20 @@ public class TurretVisual extends SingleAxisRotatingVisual<TurretBlockEntity> im
         stack.rotateXDegrees(this.headAngle);
         this.head.setTransform(this.poseStack).setChanged();
 
+        // Left Nozzle
+        stack.pushPose();
+        stack.translate(0.185, 0.25, -0.6);
+        stack.scale(this.nozzleLeftScale);
+        this.nozzleLeft.setTransform(this.poseStack).setChanged();
+        stack.popPose();
+
+        // Right Nozzle
+        stack.pushPose();
+        stack.translate(-0.185, 0.25, -0.6);
+        stack.scale(this.nozzleRightScale);
+        this.nozzleRight.setTransform(this.poseStack).setChanged();
+        stack.popPose();
+
         this.poseStack.popPose();
     }
 
@@ -101,7 +129,7 @@ public class TurretVisual extends SingleAxisRotatingVisual<TurretBlockEntity> im
     @Override
     protected void _delete() {
         super._delete();
-        this.parts.forEach(AbstractInstance::delete);
+        this.parts.forEach(Instance::delete);
     }
 
     @Override

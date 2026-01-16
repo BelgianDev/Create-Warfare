@@ -1,8 +1,8 @@
 package be.raft.warfare.content.block;
 
 import be.raft.warfare.content.WarfareBlockEntities;
-import be.raft.warfare.content.block.entity.TurretBlockEntity;
-import com.simibubi.create.AllShapes;
+import be.raft.warfare.content.WarfareShapes;
+import be.raft.warfare.content.block.entity.MechanicalTurretBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
 import com.simibubi.create.foundation.block.IBE;
@@ -20,10 +20,10 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class TurretBlock extends KineticBlock implements ICogWheel, IBE<TurretBlockEntity> {
+public class MechanicalTurretBlock extends KineticBlock implements ICogWheel, IBE<MechanicalTurretBlockEntity> {
     public static final BooleanProperty CEILING = BooleanProperty.create("ceiling");
 
-    public TurretBlock(Properties properties) {
+    public MechanicalTurretBlock(Properties properties) {
         super(properties);
 
         registerDefaultState(defaultBlockState().setValue(CEILING, false));
@@ -40,8 +40,8 @@ public class TurretBlock extends KineticBlock implements ICogWheel, IBE<TurretBl
     }
 
     @Override
-    protected @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return state.getValue(CEILING) ? AllShapes.MECHANICAL_ARM_CEILING : AllShapes.MECHANICAL_ARM;
+    protected @NotNull VoxelShape getShape(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
+        return state.getValue(CEILING) ? WarfareShapes.TURRET_CEILLING : WarfareShapes.TURRET;
     }
 
     @Override
@@ -50,12 +50,12 @@ public class TurretBlock extends KineticBlock implements ICogWheel, IBE<TurretBl
     }
 
     @Override
-    public Class<TurretBlockEntity> getBlockEntityClass() {
-        return TurretBlockEntity.class;
+    public Class<MechanicalTurretBlockEntity> getBlockEntityClass() {
+        return MechanicalTurretBlockEntity.class;
     }
 
     @Override
-    public BlockEntityType<? extends TurretBlockEntity> getBlockEntityType() {
+    public BlockEntityType<? extends MechanicalTurretBlockEntity> getBlockEntityType() {
         return WarfareBlockEntities.MECHANICAL_TURRET.get();
     }
 }

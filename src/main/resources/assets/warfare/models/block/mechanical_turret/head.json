@@ -2,10 +2,10 @@
 	"format_version": "1.9.0",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"4": "create:block/flywheel",
-		"5": "create:block/mechanical_arm",
-		"6": "create:block/elevator_pulley",
-		"9": "warfare:block/mechanical_turret"
+      "4": "create:block/flywheel",
+      "5": "create:block/mechanical_arm",
+      "6": "create:block/elevator_pulley",
+      "9": "warfare:block/mechanical_turret_nozzle"
 	},
 	"elements": [
 		{
@@ -61,34 +61,6 @@
 				"west": {"uv": [0, 0, 6, 2], "texture": "#9"},
 				"up": {"uv": [0, 0, 6, 2], "rotation": 90, "texture": "#9"},
 				"down": {"uv": [0, 0, 6, 2], "rotation": 90, "texture": "#9"}
-			}
-		},
-		{
-			"name": "nozzle_right",
-			"from": [1.5, 2.5, -16],
-			"to": [4.5, 5.5, -10],
-			"rotation": {"angle": 0, "axis": "y", "origin": [0, -1, 2]},
-			"faces": {
-				"north": {"uv": [10, 0, 13, 3], "texture": "#9"},
-				"east": {"uv": [13, 0, 16, 6], "rotation": 90, "texture": "#9"},
-				"south": {"uv": [10, 0, 13, 3], "texture": "#9"},
-				"west": {"uv": [13, 0, 16, 6], "rotation": 270, "texture": "#9"},
-				"up": {"uv": [13, 0, 16, 6], "texture": "#9"},
-				"down": {"uv": [13, 0, 16, 6], "rotation": 180, "texture": "#9"}
-			}
-		},
-		{
-			"name": "nozzle_left",
-			"from": [-4.5, 2.5, -16],
-			"to": [-1.5, 5.5, -10],
-			"rotation": {"angle": 0, "axis": "y", "origin": [0, -1, 2]},
-			"faces": {
-				"north": {"uv": [10, 0, 13, 3], "texture": "#9"},
-				"east": {"uv": [13, 0, 16, 6], "rotation": 90, "texture": "#9"},
-				"south": {"uv": [10, 0, 13, 3], "texture": "#9"},
-				"west": {"uv": [13, 0, 16, 6], "rotation": 270, "texture": "#9"},
-				"up": {"uv": [13, 0, 16, 6], "texture": "#9"},
-				"down": {"uv": [13, 0, 16, 6], "rotation": 180, "texture": "#9"}
 			}
 		}
 	]

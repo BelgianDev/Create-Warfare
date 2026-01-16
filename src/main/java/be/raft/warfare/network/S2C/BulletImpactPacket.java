@@ -1,8 +1,11 @@
 package be.raft.warfare.network.S2C;
 
-import be.raft.warfare.CreateWarfare;
+import be.raft.warfare.content.WarfarePackets;
 import io.netty.buffer.ByteBuf;
+import net.createmod.catnip.net.base.ClientboundPacketPayload;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -10,18 +13,13 @@ import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
-import net.neoforged.neoforge.network.handling.IPayloadHandler;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
-public record BulletImpactPacket(@NotNull BlockPos pos, @NotNull Direction face, float faceX, float faceY) implements CustomPacketPayload {
-    public static final CustomPacketPayload.Type<BulletImpactPacket> TYPE =
-            new CustomPacketPayload.Type<>(CreateWarfare.asLoc("bullet_impact"));
-
+public record BulletImpactPacket(@NotNull BlockPos pos, @NotNull Direction face, float faceX, float faceY) implements ClientboundPacketPayload {
     public static final StreamCodec<ByteBuf, BulletImpactPacket> CODEC = StreamCodec.composite(
             BlockPos.STREAM_CODEC, BulletImpactPacket::pos,
             Direction.STREAM_CODEC, BulletImpactPacket::face,
@@ -35,29 +33,16 @@ public record BulletImpactPacket(@NotNull BlockPos pos, @NotNull Direction face,
     }
 
     @Override
-    public @NotNull Type<? extends CustomPacketPayload> type() {
-        return TYPE;
-    }
-
-
-    // Used to define where on the face particle should spawn, but since a block face is quite small we don't need a lot of precision and bytes help with the network load.
-    private byte faceXAsByte() {
-        return (byte) (this.faceX * 255f);
-    }
-
-    private byte faceYAsByte() {
-        return (byte) (this.faceY * 255f);
-    }
-
-    public static void handle(@NotNull BulletImpactPacket payload, @NotNull IPayloadContext context) {
-        Level level = Minecraft.getInstance().level;
+    @OnlyIn(Dist.CLIENT)
+    public void handle(LocalPlayer player) {
+        ClientLevel level = player.clientLevel;
         if (level == null)
             return;
 
-        BlockState blockstate = level.getBlockState(payload.pos);
-        Direction face = payload.face;
+        BlockState blockstate = level.getBlockState(this.pos);
+        Direction face = this.face;
 
-        Vec3 hitVec = payload.getHitVec();
+        Vec3 hitVec = this.getHitVec();
         Vec3i faceNormal = face.getNormal();
         for (int i = 0; i < 5; i++) {
             Vec3 velocity = new Vec3(faceNormal.getX(), faceNormal.getY(), faceNormal.getZ())
@@ -65,6 +50,14 @@ public record BulletImpactPacket(@NotNull BlockPos pos, @NotNull Direction face,
 
             level.addParticle(new BlockParticleOption(ParticleTypes.BLOCK, blockstate), false, hitVec.x, hitVec.y, hitVec.z, velocity.x, velocity.y, velocity.z);
         }
+    }
+
+    private byte faceXAsByte() {
+        return (byte) (this.faceX * 255f);
+    }
+
+    private byte faceYAsByte() {
+        return (byte) (this.faceY * 255f);
     }
 
     public Vec3 getHitVec() {
@@ -80,5 +73,10 @@ public record BulletImpactPacket(@NotNull BlockPos pos, @NotNull Direction face,
             case Y -> new Vec3(x + this.faceX, y + offset, z + this.faceY);
             case Z -> new Vec3(x + this.faceX, y + this.faceY, z + offset);
         };
+    }
+
+    @Override
+    public PacketTypeProvider getTypeProvider() {
+        return WarfarePackets.BULLET_IMPACT;
     }
 }

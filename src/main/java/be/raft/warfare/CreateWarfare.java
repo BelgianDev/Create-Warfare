@@ -1,7 +1,6 @@
 package be.raft.warfare;
 
 import be.raft.warfare.content.*;
-import be.raft.warfare.network.WarfareNetworking;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
@@ -36,8 +35,7 @@ public class CreateWarfare {
         WarfareBlocks.register();
         WarfareItems.register();
         WarfareEntities.register();
-
-        bus.addListener(RegisterPayloadHandlersEvent.class, event -> WarfareNetworking.register(event, container));
+        WarfarePackets.register(container);
     }
 
     public static ResourceLocation asLoc(String path) {

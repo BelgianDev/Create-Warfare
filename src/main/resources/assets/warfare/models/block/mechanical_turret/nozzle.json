@@ -1,0 +1,22 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"textures": {
+        "0": "warfare:block/mechanical_turret_nozzle"
+    },
+	"elements": [
+		{
+			"from": [-1.5, -1.5, -5],
+			"to": [1.5, 1.5, 1],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, -1, -1]},
+			"faces": {
+				"north": {"uv": [10, 0, 13, 3], "texture": "#0"},
+				"east": {"uv": [13, 0, 16, 6], "rotation": 90, "texture": "#0"},
+				"south": {"uv": [10, 0, 13, 3], "texture": "#0"},
+				"west": {"uv": [13, 0, 16, 6], "rotation": 270, "texture": "#0"},
+				"up": {"uv": [13, 0, 16, 6], "texture": "#0"},
+				"down": {"uv": [13, 0, 16, 6], "rotation": 180, "texture": "#0"}
+			}
+		}
+	]
+}

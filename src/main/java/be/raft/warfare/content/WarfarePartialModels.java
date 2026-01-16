@@ -12,7 +12,8 @@ public class WarfarePartialModels {
             TURRET_COG = AllPartialModels.ARM_COG,
             TURRET_BASE = AllPartialModels.ARM_BASE,
             TURRET_ARM = block("mechanical_turret/arm"),
-            TURRET_HEAD = block("mechanical_turret/head");
+            TURRET_HEAD = block("mechanical_turret/head"),
+            TURRET_NOZZLE = block("mechanical_turret/nozzle");
 
 
     // Some machines and contraption use the same base elements of the create mod

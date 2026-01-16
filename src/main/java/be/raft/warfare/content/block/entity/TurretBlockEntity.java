@@ -1,126 +1,106 @@
 package be.raft.warfare.content.block.entity;
 
-import be.raft.warfare.content.WarfareEntities;
-import be.raft.warfare.content.block.TurretBlock;
-import be.raft.warfare.content.entity.BulletEntity;
+import com.google.common.base.Preconditions;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
-import net.createmod.catnip.animation.LerpedFloat;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Position;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.network.protocol.game.ClientboundSetActionBarTextPacket;
-import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public class TurretBlockEntity extends KineticBlockEntity {
-    private static final int RANGE = 20; // TODO: Replace with a config option.
-    private static final float SPEED_MODIFIER = 0.005f; // TODO: Replace with a config option.
+import javax.annotation.OverridingMethodsMustInvokeSuper;
+import java.util.List;
+
+/**
+ * Abstract Turret Block Entity, used as the base of all other turrets.
+ * <br><br>
+ * The way the turrets work is to target either an entity directly or a position the server sends them.
+ * <br><br>
+ * A target entity offers way more precision for animations and shooting,
+ * but they would only work for entities the client knows about, which is not always the case.
+ * <br>
+ * A target position on the other side can target positions really far away and also provides a way for future features
+ * such as a radar to send a target position to the turret.
+ *
+ * @param <E> entity type the turret can target.
+ */
+public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticBlockEntity {
     private static final int TARGET_REFRESH_RATE = 4 * 20; // TODO: Replace with a config option.
 
-    private static final float TURRET_EYE_LEVEL = 1f;
+    private static final int DEFAULT_CLIENT_REFRESH_RATE = 5 * 20;
 
     // Server
-    private final AABB targetingBoundingBox;
-
-    private LivingEntity target;
-    private Position lastTargetPosition;
     private int targetRefreshCounter;
+    private boolean targetRefreshingEnabled;
 
-    // Shared values
-    private float targetBaseAngle;
-    private float targetHeadAngle;
+    private int clientRefreshRate;
+    private int clientRefreshCounter;
 
-    // Both (Local values, those are not shared across the client and server)
-    private final boolean ceiling;
-    private boolean targetPosChanged;
+    // Targets (Shared values)
+    private @Nullable E target;
+    private @Nullable Position targetPosition;
 
-    // Client
-    public LerpedFloat baseAngle;
-    public LerpedFloat headAngle;
+    // Both (Infer)
+    private boolean targetChanged;
+    private Position lastTargetPos;
 
     public TurretBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
-
-        this.targetingBoundingBox = this.getTargetingBoundingBox();
         this.targetRefreshCounter = TARGET_REFRESH_RATE;
+        this.targetRefreshingEnabled = true;
 
-        this.baseAngle = LerpedFloat.angular();
-        this.baseAngle.startWithValue(0);
+        this.clientRefreshRate = DEFAULT_CLIENT_REFRESH_RATE;
+        this.clientRefreshCounter = this.clientRefreshRate;
 
-        this.headAngle = LerpedFloat.angular();
-        this.headAngle.startWithValue(0);
-
-        this.ceiling = state.getValue(TurretBlock.CEILING);
-        this.targetPosChanged = false;
+        this.targetChanged = false;
     }
 
     @Override
+    @OverridingMethodsMustInvokeSuper
     public void tick() {
-        if (this.level == null)
-            return;
-
         super.tick();
+
+        this.tickMovement();
         if (this.getSpeed() == 0)
-            return; // Prevent any calculation if the turret is not powered at all.
+            return; // The turret is not powered at all, so we don't do anything.
 
-        if (this.checkTarget())
-            this.lookAt(this.target.position(), this.target.getEyeHeight() / 2, true);
+        this.updateTargetPos();
+        if (this.targetChanged) {
+            this.onTargetChange();
+            this.targetChanged = false;
+        }
 
-        boolean aiming = tickMovement();
+        if (this.hasTarget() && this.turretSettled()) {
+            this.shoot();
+
+            if (this.level.isClientSide)
+                return;
+
+            this.targetRefreshCounter--;
+            if (this.targetRefreshCounter <= 0 && this.targetRefreshingEnabled)
+                this.lookForTarget();
+        }
+
         if (this.level.isClientSide)
             return;
 
-        if (this.checkTarget() && aiming)
-            this.shootTarget();
+        this.clientRefreshCounter--;
+        if (this.clientRefreshCounter <= 0 && this.hasTarget()) {
+            this.clientRefreshCounter = this.clientRefreshRate;
+            this.sendData();
+        }
 
-        this.targetRefreshCounter--;
-        if (this.targetRefreshCounter <= 0 || !this.checkTarget()) {
+        if (!this.hasTarget() && this.targetRefreshingEnabled)
             this.lookForTarget();
-            this.targetRefreshCounter = TARGET_REFRESH_RATE;
-        }
-    }
-
-
-    @Override
-    protected void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
-        super.write(compound, registries, clientPacket);
-
-        // Should probably be replaced by client simulation instead of spamming packets.
-        // We can't simply send the entity, as the reach of the turret may be a lot higher than the client's
-        compound.putFloat("base", this.targetBaseAngle);
-        compound.putFloat("head", this.targetHeadAngle);
-    }
-
-    @Override
-    protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
-        super.read(compound, registries, clientPacket);
-
-        float baseAngle = compound.getFloat("base");
-        float headAngle = compound.getFloat("head");
-
-        if (clientPacket) {
-            this.targetBaseAngle = baseAngle;
-            this.targetHeadAngle = headAngle;
-
-            this.targetPosChanged = true; // Inform the tickMovement that the values were changed.
-        } else {
-            this.targetBaseAngle = baseAngle;
-            this.targetHeadAngle = headAngle;
-
-            // Makes sure that the values are instantly set on the server, instead of interpolating them.
-            this.baseAngle.setValue(baseAngle);
-            this.headAngle.setValue(headAngle);
-        }
     }
 
     @Override
@@ -128,122 +108,288 @@ public class TurretBlockEntity extends KineticBlockEntity {
         return ClientboundBlockEntityDataPacket.create(this);
     }
 
-    private boolean checkTarget() {
-        return this.target != null && this.target.isAlive();
+    private void updateTargetPos() {
+        if (!this.isTargetEntity())
+            return; // Not an entity, no need to change anything.
+
+        if (this.lastTargetPos == null || !this.lastTargetPos.equals(this.target.position())) {
+            this.lastTargetPos = this.target.position();
+            this.targetChanged = true;
+        }
     }
 
-    private void lookForTarget() {
-        if (this.level == null)
+    @Override
+    @OverridingMethodsMustInvokeSuper
+    protected void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
+        super.write(compound, registries, clientPacket);
+
+        if (!clientPacket)
             return;
 
-        this.target = this.level.getNearestEntity(LivingEntity.class, TargetingConditions.DEFAULT, null,
-                this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ(), this.targetingBoundingBox);
+        if (!this.hasTarget()) {
+            compound.putInt("target", -1);
+            return;
+        }
+
+        Position pos = this.targetPosition();
+
+        compound.putInt("target", this.target == null ? -1 : this.target.getId());
+        compound.putDouble("x", pos.x());
+        compound.putDouble("y", pos.y());
+        compound.putDouble("z", pos.z());
     }
 
-    private AABB getTargetingBoundingBox() {
-        return new AABB(this.getBlockPos()).inflate(RANGE);
+    @Override
+    @SuppressWarnings("unchecked")
+    @OverridingMethodsMustInvokeSuper
+    protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
+        super.read(compound, registries, clientPacket);
+
+        if (!clientPacket)
+            return;
+
+        int entityId = compound.getInt("target");
+        if (!compound.contains("x") && entityId == -1) { // Clear entity target.
+            this.target = null;
+            this.targetPosition = null;
+
+            return;
+        }
+
+        Entity entity = this.level.getEntity(entityId);
+        if (entity != null) {
+            if (entity.equals(this.target))
+                return;
+
+            this.target = (E) entity;
+            this.targetPosition = null;
+            this.targetChanged = true;
+
+            return;
+        }
+
+        // Fall back to the recorded position in-case of the client doesn't know about the entity.
+        Vec3 pos = new Vec3(compound.getDouble("x"), compound.getDouble("y"), compound.getDouble("z"));
+        if (pos.equals(this.targetPosition))
+            return;
+
+        this.targetPosition = pos;
+        this.target = null;
+        this.targetChanged = true;
+    }
+
+    private void resetClientRefreshCounter() {
+        this.clientRefreshCounter = this.clientRefreshRate;
     }
 
     /**
-     * Forces the turret to look at the given position.
+     * Used to set the rate to which the server will resend the target position to the client.
+     * <br><br>
+     * This is used in the case where the client doesn't know about the target entity, and refreshing the pos will update the pos on the client.
+     * <br>
+     * Usually a slow rate is enough, as if the client doesn't know about the entity, it means it's far away and the player won't be able to perceive that
+     * aiming is off.
+     * <br><br>
+     * <b>Note:</b> every time the client receives a refresh packet from the server, it will recheck if the entity is available on the client,
+     * so it can be slow, but this will also affect how fast the client will pick up with the entity.
      *
-     * @param position position to look at.
-     * @param height additional height to add to the position,
-     *               should be used to target the center of the target's bounding box.
-     * @param sync whether to sync the change to the clients.
+     * @param ticks tick rate, by default, it's 5 seconds.
      */
-    public void lookAt(@NotNull Position position, float height, boolean sync) {
-        if (this.level.isClientSide)
-            return;
-
-        if (this.lastTargetPosition != null && this.lastTargetPosition.equals(position))
-            return; // The entity didn't move, so no need to recompute the angles.
-
-        this.lastTargetPosition = position;
-        BlockPos turretPos = this.getBlockPos();
-
-        double deltaX = position.x() - (turretPos.getX() + 0.5);
-        double deltaY = (position.y() + height) - (turretPos.getY() + (this.ceiling ? -TURRET_EYE_LEVEL : TURRET_EYE_LEVEL));
-        double deltaZ = position.z() - (turretPos.getZ() + 0.5);
-
-        double horizontalDelta = (float) Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
-
-        float angle = (float) Math.toDegrees(Math.atan2(-deltaX, -deltaZ));
-        float pitch = (float) Math.toDegrees(Math.atan2(deltaY, horizontalDelta));
-        pitch = Mth.clamp(pitch, -35, 90); // Stay within bounds of the model
-
-        if (this.ceiling) { // Invert values for ceiling turrets.
-            angle = -(angle + 180);
-            pitch = -pitch;
-        }
-
-        if (this.targetBaseAngle == angle && this.targetHeadAngle == pitch)
-            return; // No need to update anything.
-
-        this.targetBaseAngle = angle;
-        this.targetHeadAngle = pitch;
-        this.targetPosChanged = true;
-
-        if (sync)
-            this.notifyUpdate();
-        else
-            this.setChanged(); // Still tell the server the block entity changed
-    }
-
-    public void shootTarget() {
-        double eyeOffset = this.ceiling ? -TURRET_EYE_LEVEL : TURRET_EYE_LEVEL;
-        Vec3 firePoint = this.getBlockPos().getCenter().add(0, eyeOffset, 0);
-
-        double targetY = this.target.getEyeY() - 1.1F;
-        double deltaX = this.target.getX() - firePoint.x;
-        double deltaY = targetY - firePoint.y;
-        double deltaZ = this.target.getZ() - firePoint.z;
-
-        BulletEntity bullet = new BulletEntity(WarfareEntities.BULLET.get(), this.level, this.getBlockPos());
-
-        bullet.setOwner(null);
-        bullet.setPos(firePoint);
-        bullet.shoot(deltaX, deltaY, deltaZ, 1.6F, 5F);
-
-        this.level.addFreshEntity(bullet);
+    protected final void setClientRefreshRate(int ticks) {
+        this.clientRefreshRate = ticks;
     }
 
     /**
-     * Called every tick to update the turret's movement.
-     *
-     * @return {@code true} if the turret is aiming the target, {@code false} otherwise.
+     * Forces the turret to look for a new target.
      */
-    private boolean tickMovement() {
-        float speed = Math.abs(this.getSpeed());
-        this.baseAngle.updateChaseSpeed(speed * SPEED_MODIFIER);
-        this.headAngle.updateChaseSpeed(speed * SPEED_MODIFIER);
+    public void lookForTarget() {
+        AABB targetingBoundingBox = this.getTargetingBoundingBox();
 
-        this.baseAngle.tickChaser();
-        this.headAngle.tickChaser();
+        List<E> entities = this.level.getEntitiesOfClass(this.targetClass(), targetingBoundingBox, this::canTarget);
+        E entity = this.level.getNearestEntity(entities, TargetingConditions.DEFAULT, null,
+                this.getBlockPos().getX(), this.getBlockPos().getY(), this.getBlockPos().getZ());
 
-        if (this.targetPosChanged) {
-            this.targetPosChanged = false;
-            
-            // Always update the target to ensure the chaser knows where to go.
-            // LerpedFloat.angular() will handle the shortest-path wrapping internally.
-            if (this.baseAngle.getChaseTarget() != this.targetBaseAngle) {
-                this.baseAngle.chase(this.targetBaseAngle, speed * SPEED_MODIFIER, LerpedFloat.Chaser.EXP);
-            }
-
-            if (this.headAngle.getChaseTarget() != this.targetHeadAngle) {
-                this.headAngle.chase(this.targetHeadAngle, speed * SPEED_MODIFIER, LerpedFloat.Chaser.EXP);
-            }
+        if (entity == null) {
+            this.clearTarget();
+            return;
         }
 
-        // Don't use .settled() for firing logic, as it requires exact float equality 
-        // with a target that might be wrapped. Instead, check if the difference is small.
-        float baseDiff = Mth.degreesDifference(this.baseAngle.getValue(), this.targetBaseAngle);
-        float headDiff = Math.abs(this.headAngle.getValue() - this.targetHeadAngle);
-
-        return Math.abs(baseDiff) < 1.0f && headDiff < 1.0f;
+        this.setTarget(entity);
     }
 
-    private void broadcastDebug(String msg) {
-        ServerLifecycleHooks.getCurrentServer().getPlayerList().broadcastAll(new ClientboundSetActionBarTextPacket(Component.literal(msg)));
+    /**
+     * Clears the target of the turret.
+     */
+    public void clearTarget() {
+        if (this.target == null && this.targetPosition == null)
+            return;
+
+        this.target = null;
+        this.targetPosition = null;
+
+        this.notifyUpdate();
     }
+
+    /**
+     * Sets the target of the turret to the given entity.
+     *
+     * @param target target entity.
+     *
+     * @return {@code true} if the target was successfully set, {@code false} otherwise.
+     */
+    public final boolean setTarget(@NotNull E target) {
+        Preconditions.checkState(!this.level.isClientSide, "Cannot set target on client side!");
+        Preconditions.checkNotNull(target, "Target entity cannot be null!");
+
+        if (!this.canTarget(target))
+            return false;
+
+        this.targetRefreshCounter = TARGET_REFRESH_RATE;
+        if (this.target == target)
+            return true;
+
+        this.targetPosition = null;
+        this.target = target;
+        this.targetChanged = true;
+
+        this.resetClientRefreshCounter();
+        this.notifyUpdate();
+
+        return true;
+    }
+
+    /**
+     * Sets the target of the turret to the given position.
+     *
+     * @param target target position.
+     */
+    public final void setTarget(@NotNull Position target) {
+        Preconditions.checkState(!this.level.isClientSide, "Cannot set target on client side!");
+        Preconditions.checkNotNull(target, "Target entity cannot be null!");
+
+        this.targetRefreshCounter = TARGET_REFRESH_RATE;
+        if (this.targetPosition == target)
+            return;
+
+        this.targetPosition = target;
+        this.target = null;
+
+        this.targetChanged = true;
+
+        this.resetClientRefreshCounter();
+        this.notifyUpdate();
+    }
+
+    /**
+     * Sets whether the turret should refresh its target automatically.
+     *
+     * @param enabled {@code true} to enable automatic refreshing, {@code false} to disable it.
+     */
+    public final void setTargetRefreshingEnabled(boolean enabled) {
+        Preconditions.checkState(!this.level.isClientSide, "Cannot set refreshing on client side!");
+        this.targetRefreshingEnabled = enabled;
+    }
+
+    /**
+     * Whether the turret will refresh its target after a bit of time.
+     *
+     * @return {@code true} if the turret will refresh its target, {@code false} otherwise.
+     */
+    public final boolean isTargetRefreshingEnabled() {
+        return this.targetRefreshingEnabled;
+    }
+
+    /**
+     * Retrieve the target position.
+     *
+     * @return the target position, or {@code null} if the turret doesn't target a position.
+     */
+    public final @Nullable Position targetPosition() {
+        return this.target != null ? this.target.position() : this.targetPosition;
+    }
+
+    /**
+     * Checks whether the turret has a target.
+     *
+     * @return {@code true} if the turret has a target, {@code false} otherwise.
+     */
+    public final boolean hasTarget() {
+        if (this.targetPosition != null)
+            return true;
+
+        return this.target != null && this.canTarget(this.target);
+    }
+
+    /**
+     * Checks whether the turret currently targets an entity.
+     *
+     * @return {@code true} if the turret targets an entity, {@code false} otherwise.
+     */
+    public final boolean isTargetEntity() {
+        return this.target != null;
+    }
+
+    /**
+     * Checks whether the turret currently targets a position.
+     *
+     * @return {@code true} if the turret targets a position, {@code false} otherwise.
+     */
+    public final boolean isTargetPosition() {
+        return this.targetPosition != null;
+    }
+
+    /**
+     * Retrieve the entity target.
+     *
+     * @return entity target, or {@code null} if the turret doesn't target an entity.
+     */
+    public final @Nullable E getTarget() {
+        return this.target;
+    }
+
+    /**
+     * Called when the target of the turret changes.
+     */
+    protected abstract void onTargetChange();
+
+    /**
+     * Called on every tick to update the turret's movement.
+     */
+    protected abstract void tickMovement();
+
+    /**
+     * Checks whether the turret is settled, meaning it has stopped moving, {@link #hasTarget()} is still {@code true},
+     * that means the turret is now aiming at the target.
+     *
+     * @return {@code true} if the turret is settled, {@code false} otherwise.
+     */
+    public abstract boolean turretSettled();
+
+    /**
+     * Retrieve the targeting bounding box of the turret.
+     *
+     * @return bounding box, where the turret can target entities.
+     */
+    public abstract @NotNull AABB getTargetingBoundingBox();
+
+    /**
+     * Checks if the turret can target the given entity.
+     *
+     * @param entity the entity to check.
+     *
+     * @return {@code true} if the entity can be targeted, {@code false} otherwise.
+     */
+    public abstract boolean canTarget(@NotNull E entity);
+
+    /**
+     * Retrieve the entity class the turret can target.
+     *
+     * @return target class.
+     */
+    public abstract @NotNull Class<E> targetClass();
+
+    /**
+     * Called when the turret is supposed to shoot the target, this is called on the server and client side!
+     */
+    public abstract void shoot();
 }
