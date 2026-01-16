@@ -3,7 +3,6 @@ package be.raft.warfare.content.block.entity;
 import be.raft.warfare.content.WarfareEntities;
 import be.raft.warfare.content.block.MechanicalTurretBlock;
 import be.raft.warfare.content.entity.BulletEntity;
-import com.simibubi.create.content.kinetics.mechanicalArm.ArmBlock;
 import com.simibubi.create.foundation.blockEntity.behaviour.CenteredSideValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import net.createmod.catnip.animation.LerpedFloat;
@@ -28,6 +27,7 @@ public class MechanicalTurretBlockEntity extends TurretBlockEntity<LivingEntity>
     private static final float SPEED_MODIFIER = 0.005f; // TODO: Replace with a config option.
 
     private static final float TURRET_EYE_LEVEL = 1f;
+    private static final DustParticleOptions SMOKE_PARTICLE_OPTION = new DustParticleOptions(new Color(0xAAAAAA).asVectorF(), 1.2f);
 
     // Server
     private final AABB cachedBoundingBox;
@@ -161,20 +161,21 @@ public class MechanicalTurretBlockEntity extends TurretBlockEntity<LivingEntity>
     }
 
     private Vec3 getNozzlePosition(boolean left) {
-        Vec3 center = this.getFirePoint();
-        float headAngle = this.headAngle.getValue();
-        float baseAngle = this.baseAngle.getValue();
+        Vec3 pos = this.getBlockPos().getCenter();
+        float currentHeadAngle = this.headAngle.getValue();
+        float currentBaseAngle = this.baseAngle.getValue();
 
         double xOffset = left ? 0.185 : -0.185;
-        Vec3 nozzleOffset = new Vec3(xOffset, 0.1, -0.5);
-
-        nozzleOffset = nozzleOffset.xRot((float) Math.toRadians(headAngle));
-        nozzleOffset = nozzleOffset.yRot((float) Math.toRadians(baseAngle));
+        Vec3 nozzlePos = new Vec3(xOffset, 0.25, -0.9);
+        nozzlePos = nozzlePos.xRot((float) Math.toRadians(-currentHeadAngle));
+        nozzlePos = nozzlePos.add(0, 0.55, 0.4);
+        nozzlePos = nozzlePos.add(0, 6 / 16d, 0);
+        nozzlePos = nozzlePos.yRot((float) Math.toRadians(currentBaseAngle));
 
         if (this.ceiling)
-            nozzleOffset = new Vec3(nozzleOffset.x, -nozzleOffset.y, -nozzleOffset.z);
+            nozzlePos = new Vec3(nozzlePos.x, -nozzlePos.y, -nozzlePos.z);
 
-        return center.add(nozzleOffset);
+        return pos.add(nozzlePos);
     }
 
     @Override
@@ -183,8 +184,8 @@ public class MechanicalTurretBlockEntity extends TurretBlockEntity<LivingEntity>
             Vec3 leftNozzle = this.getNozzlePosition(true);
             Vec3 rightNozzle = this.getNozzlePosition(false);
 
-            this.level.addParticle(new DustParticleOptions(new Color(0xAAAAAA).asVectorF(), 1f), leftNozzle.x, leftNozzle.y, leftNozzle.z, 0, 0, 0);
-            this.level.addParticle(new DustParticleOptions(new Color(0xAAAAAA).asVectorF(), 1f), rightNozzle.x, rightNozzle.y, rightNozzle.z, 0, 0, 0);
+            this.level.addParticle(SMOKE_PARTICLE_OPTION, leftNozzle.x, leftNozzle.y, leftNozzle.z, 0, 0, 0);
+            this.level.addParticle(SMOKE_PARTICLE_OPTION, rightNozzle.x, rightNozzle.y, rightNozzle.z, 0, 0, 0);
 
             return;
         }

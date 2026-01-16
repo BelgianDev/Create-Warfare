@@ -63,8 +63,6 @@ public class TurretVisual extends SingleAxisRotatingVisual<MechanicalTurretBlock
 
         this.parts = List.of(this.base, this.arm, this.head, this.nozzleRight, this.nozzleLeft);
 
-
-
         PoseTransformStack tfm = TransformStack.of(this.poseStack);
         tfm.translate(this.getVisualPosition());
         tfm.center();
