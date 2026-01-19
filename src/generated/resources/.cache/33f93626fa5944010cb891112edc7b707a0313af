@@ -1,7 +1,7 @@
-// 1.21.1	2025-12-30T17:56:39.443886255	Registrate Provider for warfare [Registries, Data Maps, Recipes, Advancements, Loot Tables, Tags (blocks), Tags (enchantments), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider]
+// 1.21.1	2026-01-19T09:02:54.697045799	Registrate Provider for warfare [Registries, Data Maps, Recipes, Advancements, Loot Tables, Tags (blocks), Tags (enchantments), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider]
 bbb9121228cb44011c661e7d3d927ff42c66f88b assets/warfare/blockstates/mechanical_turret.json
-34372442f13c6ce0c84faa182c77675e97738598 assets/warfare/lang/en_ud.json
-822001816d833f556339337a95004eba106ca139 assets/warfare/lang/en_us.json
+ac1b821a1be487fb9704a40f3728c29388ceb00e assets/warfare/lang/en_ud.json
+59bb96af62b41fddb5597704dc8af462df462116 assets/warfare/lang/en_us.json
 ebca13432e893322009d5e7fdaffbadcd289ef19 assets/warfare/models/item/mechanical_turret.json
 5408d310a31319d99eed1f0728df0be6b54873d2 data/minecraft/tags/block/mineable/axe.json
 5408d310a31319d99eed1f0728df0be6b54873d2 data/minecraft/tags/block/mineable/pickaxe.json

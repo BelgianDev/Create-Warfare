@@ -81,7 +81,7 @@ public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticB
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         super.addBehaviours(behaviours);
         this.targetingMode = new ScrollOptionBehaviour<>(TargetingMode.class,
-                Component.translatable("warfare.ui.turret.targeting_mode"), this, this.targetingBoxTransform());
+                Component.translatable("ui.warfare.turret.targeting_mode"), this, this.targetingBoxTransform());
 
         this.targetingMode.setValue(2);
 
@@ -431,8 +431,8 @@ public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticB
     public enum TargetingMode implements INamedIconOptions {
         ALL(AllIcons.I_WHITELIST, entity -> entity instanceof Mob || entity instanceof Player),
         PLAYERS(WarfareIcons.PLAYER_HEAD, entity -> entity instanceof Player),
-        MONSTER(WarfareIcons.MONSTER_HEAD, entity -> entity instanceof Monster),
-        PASSIVE(WarfareIcons.MOB_HEAD, entity -> entity instanceof Mob && !(entity instanceof Monster));
+        MONSTERS(WarfareIcons.MONSTER_HEAD, entity -> entity instanceof Monster),
+        PASSIVES(WarfareIcons.MOB_HEAD, entity -> entity instanceof Mob && !(entity instanceof Monster));
 
         private final String translationKey;
         private final AllIcons icon;
@@ -440,7 +440,7 @@ public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticB
 
         TargetingMode(AllIcons icon, Predicate<Entity> entityFilter) {
             this.icon = icon;
-            this.translationKey = "warfare.turret.targeting_mode." + name().toLowerCase();
+            this.translationKey = "ui.warfare.turret.targeting_mode." + name().toLowerCase();
             this.entityFilter = entityFilter;
         }
 

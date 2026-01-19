@@ -1,4 +1,11 @@
 {
   "block.warfare.mechanical_turret": "Mechanical Turret",
-  "entity.warfare.bullet": "Bullet"
+  "death.attack.warfare.bullet": "%1$s was turned into swiss cheese",
+  "entity.warfare.bullet": "Bullet",
+  "itemGroup.warfare": "Create: Warfare",
+  "ui.warfare.turret.targeting_mode": "Turret Targeting Mode",
+  "ui.warfare.turret.targeting_mode.all": "All",
+  "ui.warfare.turret.targeting_mode.monsters": "Monsters",
+  "ui.warfare.turret.targeting_mode.passives": "Passives",
+  "ui.warfare.turret.targeting_mode.players": "Players"
 }

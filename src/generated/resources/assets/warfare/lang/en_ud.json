@@ -1,4 +1,11 @@
 {
   "block.warfare.mechanical_turret": "ʇǝɹɹn⟘ ןɐɔıuɐɥɔǝW",
-  "entity.warfare.bullet": "ʇǝןןnᗺ"
+  "death.attack.warfare.bullet": "ǝsǝǝɥɔ ssıʍs oʇuı pǝuɹnʇ sɐʍ %1$s",
+  "entity.warfare.bullet": "ʇǝןןnᗺ",
+  "itemGroup.warfare": "ǝɹɐɟɹɐM :ǝʇɐǝɹƆ",
+  "ui.warfare.turret.targeting_mode": "ǝpoW buıʇǝbɹɐ⟘ ʇǝɹɹn⟘",
+  "ui.warfare.turret.targeting_mode.all": "ןןⱯ",
+  "ui.warfare.turret.targeting_mode.monsters": "sɹǝʇsuoW",
+  "ui.warfare.turret.targeting_mode.passives": "sǝʌıssɐԀ",
+  "ui.warfare.turret.targeting_mode.players": "sɹǝʎɐןԀ"
 }
