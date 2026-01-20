@@ -1,8 +1,8 @@
 package be.raft.warfare.client.visual;
 
-import be.raft.warfare.content.WarfarePartialModels;
-import be.raft.warfare.content.block.MechanicalTurretBlock;
-import be.raft.warfare.content.block.entity.MechanicalTurretBlockEntity;
+import be.raft.warfare.registry.WarfarePartialModels;
+import be.raft.warfare.block.MechanicalTurretBlock;
+import be.raft.warfare.block.entity.MechanicalTurretBlockEntity;
 import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual;
 import dev.engine_room.flywheel.api.instance.Instance;
 import dev.engine_room.flywheel.api.visual.DynamicVisual;

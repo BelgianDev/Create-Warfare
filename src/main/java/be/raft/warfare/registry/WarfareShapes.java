@@ -1,4 +1,4 @@
-package be.raft.warfare.content;
+package be.raft.warfare.registry;
 
 import com.simibubi.create.AllShapes;
 import net.minecraft.world.level.block.Block;

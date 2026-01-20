@@ -1,8 +1,8 @@
-package be.raft.warfare.content;
+package be.raft.warfare.registry;
 
 import be.raft.warfare.CreateWarfare;
 import be.raft.warfare.client.renderer.entity.BulletRenderer;
-import be.raft.warfare.content.entity.BulletEntity;
+import be.raft.warfare.entity.BulletEntity;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.EntityEntry;
 import net.minecraft.world.entity.MobCategory;

@@ -1,6 +1,7 @@
-package be.raft.warfare.content.block.entity;
+package be.raft.warfare.block.entity;
 
-import be.raft.warfare.content.WarfareIcons;
+import be.raft.warfare.registry.WarfareIcons;
+import be.raft.warfare.registry.WarfareItems;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Predicate;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
@@ -21,6 +22,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -57,6 +59,9 @@ public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticB
     private int clientRefreshRate;
     private int clientRefreshCounter;
 
+    // Inventory (Both)
+    private ItemStack magazine;
+
     // Targets (Shared values)
     private @Nullable E target;
     private @Nullable Position targetPosition;
@@ -74,7 +79,7 @@ public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticB
         this.clientRefreshCounter = this.clientRefreshRate;
 
         this.targetChanged = false;
-
+        this.magazine = ItemStack.EMPTY;
     }
 
     @Override
@@ -208,6 +213,61 @@ public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticB
 
     private boolean isValidTarget(E entity) {
         return this.targetingMode.get().testEntity(entity) && this.canTarget(entity);
+    }
+
+    /**
+     * Retrieve the magazine item the turret uses.
+     *
+     * @return magazine item.
+     */
+    public ItemStack getMagazine() {
+        return this.magazine;
+    }
+
+    /**
+     * Sets the magazine of the turret.
+     *
+     * @param magazine magazine item to set.
+     */
+    public void setMagazine(ItemStack magazine) {
+        this.magazine = magazine;
+    }
+
+    /**
+     * Checks whether the turret can accept the item.
+     * <br>
+     * This does not check whether the stack can fully be input, so take into account some remaining could stay.
+     *
+     * @param stack stack to check.
+     *
+     * @return {@code true} if the stack can be used as a magazine, {@code false} otherwise.
+     */
+    public final boolean canAcceptMagazine(ItemStack stack) {
+        if (stack == null || !this.isItemValidMagazine(stack))
+            return false;
+
+        if (this.magazine.isEmpty() || this.magazine.getCount() == this.magazine.getMaxStackSize())
+            return true;
+
+        return this.magazine.is(stack.getItem());
+    }
+
+    /**
+     * Checks whether the turret can accept the given item as a magazine.
+     *
+     * @param stack stack to check.
+     *
+     * @return {@code true} if the stack can be used as a magazine, {@code false} otherwise.
+     *
+     * @implNote this should only check the item stack state, not the actual state of the turret.
+     * This is also used by {@link net.neoforged.neoforge.items.IItemHandler#isItemValid(int, ItemStack)},
+     * and checking the turret state could worsen performance.
+     *
+     * @see net.neoforged.neoforge.items.IItemHandler#isItemValid(int, ItemStack)
+     */
+    public boolean isItemValidMagazine(@NotNull ItemStack stack) {
+        // TODO: Eventually change the bullets to be ItemComponent-driven
+        return stack.getItem() == WarfareItems.BULLET.asItem();
     }
 
     /**

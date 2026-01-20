@@ -1,8 +1,8 @@
-package be.raft.warfare.content.block.entity;
+package be.raft.warfare.block.entity;
 
-import be.raft.warfare.content.WarfareEntities;
-import be.raft.warfare.content.block.MechanicalTurretBlock;
-import be.raft.warfare.content.entity.BulletEntity;
+import be.raft.warfare.registry.WarfareEntities;
+import be.raft.warfare.block.MechanicalTurretBlock;
+import be.raft.warfare.entity.BulletEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.CenteredSideValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import net.createmod.catnip.animation.LerpedFloat;

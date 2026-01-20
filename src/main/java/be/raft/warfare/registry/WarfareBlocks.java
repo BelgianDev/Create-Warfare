@@ -1,7 +1,7 @@
-package be.raft.warfare.content;
+package be.raft.warfare.registry;
 
 import be.raft.warfare.CreateWarfare;
-import be.raft.warfare.content.block.MechanicalTurretBlock;
+import be.raft.warfare.block.MechanicalTurretBlock;
 import com.simibubi.create.foundation.data.*;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import net.minecraft.world.item.BlockItem;

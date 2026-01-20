@@ -1,7 +1,6 @@
-package be.raft.warfare.content;
+package be.raft.warfare.registry;
 
 import be.raft.warfare.CreateWarfare;
-import com.simibubi.create.AllBlocks;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;

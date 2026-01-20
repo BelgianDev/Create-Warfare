@@ -1,4 +1,4 @@
-package be.raft.warfare.content;
+package be.raft.warfare.registry;
 
 import be.raft.warfare.CreateWarfare;
 import net.minecraft.core.Holder;

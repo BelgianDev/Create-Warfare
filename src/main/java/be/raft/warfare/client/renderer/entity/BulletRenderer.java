@@ -1,15 +1,12 @@
 package be.raft.warfare.client.renderer.entity;
 
-import be.raft.warfare.CreateWarfare;
-import be.raft.warfare.content.entity.BulletEntity;
+import be.raft.warfare.entity.BulletEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.entity.ArrowRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class BulletRenderer extends EntityRenderer<BulletEntity> {
     public BulletRenderer(EntityRendererProvider.Context context) {

@@ -1,6 +1,6 @@
-package be.raft.warfare.content.entity;
+package be.raft.warfare.entity;
 
-import be.raft.warfare.content.WarfareDamageTypes;
+import be.raft.warfare.registry.WarfareDamageTypes;
 import be.raft.warfare.network.S2C.BulletImpactPacket;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

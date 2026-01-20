@@ -1,7 +1,7 @@
 package be.raft.warfare.client.renderer.block;
 
-import be.raft.warfare.content.WarfarePartialModels;
-import be.raft.warfare.content.block.entity.MechanicalTurretBlockEntity;
+import be.raft.warfare.registry.WarfarePartialModels;
+import be.raft.warfare.block.entity.MechanicalTurretBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
 import net.createmod.catnip.render.CachedBuffers;

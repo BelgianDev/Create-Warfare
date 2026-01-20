@@ -1,8 +1,8 @@
-package be.raft.warfare.content.block;
+package be.raft.warfare.block;
 
-import be.raft.warfare.content.WarfareBlockEntities;
-import be.raft.warfare.content.WarfareShapes;
-import be.raft.warfare.content.block.entity.MechanicalTurretBlockEntity;
+import be.raft.warfare.registry.WarfareBlockEntities;
+import be.raft.warfare.registry.WarfareShapes;
+import be.raft.warfare.block.entity.MechanicalTurretBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
 import com.simibubi.create.foundation.block.IBE;
