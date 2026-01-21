@@ -1,5 +1,6 @@
 package be.raft.warfare.block.entity;
 
+import be.raft.warfare.registry.WarfareBlockEntities;
 import be.raft.warfare.registry.WarfareEntities;
 import be.raft.warfare.block.MechanicalTurretBlock;
 import be.raft.warfare.entity.BulletEntity;
@@ -20,6 +21,8 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class MechanicalTurretBlockEntity extends TurretBlockEntity<LivingEntity> {
@@ -46,6 +49,10 @@ public class MechanicalTurretBlockEntity extends TurretBlockEntity<LivingEntity>
     public final LerpedFloat nozzleRightScale;
 
     private int animationTick = 0;
+
+    public static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, WarfareBlockEntities.MECHANICAL_TURRET.get(), (be, ctx) -> be.itemHandler);
+    }
 
     public MechanicalTurretBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);

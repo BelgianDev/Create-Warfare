@@ -1,5 +1,6 @@
 package be.raft.warfare.block.entity;
 
+import be.raft.warfare.inventory.handler.TurretItemHandler;
 import be.raft.warfare.registry.WarfareIcons;
 import be.raft.warfare.registry.WarfareItems;
 import com.google.common.base.Preconditions;
@@ -60,6 +61,7 @@ public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticB
     private int clientRefreshCounter;
 
     // Inventory (Both)
+    protected final TurretItemHandler itemHandler;
     private ItemStack magazine;
 
     // Targets (Shared values)
@@ -79,6 +81,8 @@ public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticB
         this.clientRefreshCounter = this.clientRefreshRate;
 
         this.targetChanged = false;
+
+        this.itemHandler = new TurretItemHandler(this);
         this.magazine = ItemStack.EMPTY;
     }
 

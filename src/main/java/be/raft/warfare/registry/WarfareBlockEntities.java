@@ -6,6 +6,8 @@ import be.raft.warfare.client.visual.TurretVisual;
 import be.raft.warfare.block.entity.MechanicalTurretBlockEntity;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 
 public class WarfareBlockEntities {
     private static final CreateRegistrate REGISTRATE = CreateWarfare.REGISTRATE;
@@ -17,6 +19,11 @@ public class WarfareBlockEntities {
             .renderer(() -> TurretRenderer::new)
             .register();
 
-    public static void register() {}
+    public static void register(IEventBus bus) {
+        bus.addListener(WarfareBlockEntities::registerCapabilities);
+    }
 
+    private static void registerCapabilities(RegisterCapabilitiesEvent event) {
+        MechanicalTurretBlockEntity.registerCapabilities(event);
+    }
 }
