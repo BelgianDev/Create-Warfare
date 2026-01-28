@@ -1,8 +1,11 @@
 package be.raft.warfare.block;
 
+import be.raft.warfare.block.entity.RocketControllerBlockEntity;
+import be.raft.warfare.registry.WarfareBlockEntities;
 import com.mojang.serialization.MapCodec;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
+import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -13,6 +16,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
@@ -22,7 +26,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 
-public class RocketControllerBlock extends HorizontalDirectionalBlock implements ProperWaterloggedBlock, IWrenchable {
+public class RocketControllerBlock extends HorizontalDirectionalBlock implements IBE<RocketControllerBlockEntity>, ProperWaterloggedBlock, IWrenchable {
     public static final MapCodec<RocketControllerBlock> CODEC = simpleCodec(RocketControllerBlock::new);
     public static final BooleanProperty ASSEMBLING = BooleanProperty.create("assembling");
 
@@ -81,5 +85,15 @@ public class RocketControllerBlock extends HorizontalDirectionalBlock implements
     @Override
     protected boolean isPathfindable(@NotNull BlockState state, @NotNull PathComputationType pathComputationType) {
         return false;
+    }
+
+    @Override
+    public Class<RocketControllerBlockEntity> getBlockEntityClass() {
+        return RocketControllerBlockEntity.class;
+    }
+
+    @Override
+    public BlockEntityType<? extends RocketControllerBlockEntity> getBlockEntityType() {
+        return WarfareBlockEntities.ROCKET_CONTROLLER.get();
     }
 }

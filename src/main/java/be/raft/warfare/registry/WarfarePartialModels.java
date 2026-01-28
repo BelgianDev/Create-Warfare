@@ -13,7 +13,11 @@ public class WarfarePartialModels {
             TURRET_BASE = AllPartialModels.ARM_BASE,
             TURRET_ARM = block("mechanical_turret/arm"),
             TURRET_HEAD = block("mechanical_turret/head"),
-            TURRET_NOZZLE = block("mechanical_turret/nozzle");
+            TURRET_NOZZLE = block("mechanical_turret/nozzle"),
+
+            // Vertical Bulb
+            VERTICAL_BULB = block("vertical_bulb/bulb"),
+            VERTICAL_BULB_GLOW = block("vertical_bulb/glow");
 
 
     // Some machines and contraption use the same base elements of the create mod

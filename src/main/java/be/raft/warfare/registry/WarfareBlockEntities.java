@@ -1,6 +1,8 @@
 package be.raft.warfare.registry;
 
 import be.raft.warfare.CreateWarfare;
+import be.raft.warfare.block.entity.RocketControllerBlockEntity;
+import be.raft.warfare.client.renderer.block.RocketControllerRenderer;
 import be.raft.warfare.client.renderer.block.TurretRenderer;
 import be.raft.warfare.client.visual.TurretVisual;
 import be.raft.warfare.block.entity.MechanicalTurretBlockEntity;
@@ -17,6 +19,12 @@ public class WarfareBlockEntities {
             .visual(() -> TurretVisual::new)
             .validBlocks(WarfareBlocks.MECHANICAL_TURRET)
             .renderer(() -> TurretRenderer::new)
+            .register();
+
+    public static final BlockEntityEntry<RocketControllerBlockEntity> ROCKET_CONTROLLER = REGISTRATE
+            .blockEntity("rocket_controller", RocketControllerBlockEntity::new)
+            .validBlocks(WarfareBlocks.ROCKET_CONTROLLER)
+            .renderer(() -> RocketControllerRenderer::new)
             .register();
 
     public static void register(IEventBus bus) {
