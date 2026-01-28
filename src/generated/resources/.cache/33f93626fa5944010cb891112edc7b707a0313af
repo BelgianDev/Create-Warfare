@@ -1,9 +1,12 @@
-// 1.21.1	2026-01-20T17:53:22.155233615	Registrate Provider for warfare [Registries, Data Maps, Recipes, Advancements, Loot Tables, Tags (blocks), Tags (enchantments), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider]
+// 1.21.1	2026-01-28T13:01:25.119947002	Registrate Provider for warfare [Registries, Data Maps, Recipes, Advancements, Loot Tables, Tags (blocks), Tags (enchantments), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider]
 bbb9121228cb44011c661e7d3d927ff42c66f88b assets/warfare/blockstates/mechanical_turret.json
-38ca4e2ec72303b78daadb75e23a8b4823c5a821 assets/warfare/lang/en_ud.json
-393e81783f8772945e535f6c1a03117b59b4be1c assets/warfare/lang/en_us.json
+0ed2bbc8410c257e0744ef3f7274d3463c552f6d assets/warfare/blockstates/rocket_controller.json
+2a94250e5658b7544ffda5c7fce0b291a33d376b assets/warfare/lang/en_ud.json
+6f6058e5b1057094e46444b29b0d5e3e0b0bdf68 assets/warfare/lang/en_us.json
 4f4516de0849f1ae9657c9ffdd37efb10cf8a41a assets/warfare/models/item/bullet.json
 ebca13432e893322009d5e7fdaffbadcd289ef19 assets/warfare/models/item/mechanical_turret.json
-5408d310a31319d99eed1f0728df0be6b54873d2 data/minecraft/tags/block/mineable/axe.json
-5408d310a31319d99eed1f0728df0be6b54873d2 data/minecraft/tags/block/mineable/pickaxe.json
+2336df8b6a8685bfe2d95503fb74716b82c835a9 assets/warfare/models/item/rocket_controller.json
+d2c260f1e75e7a5fb9d3f0d934a329b3bf9d06f3 data/minecraft/tags/block/mineable/axe.json
+d2c260f1e75e7a5fb9d3f0d934a329b3bf9d06f3 data/minecraft/tags/block/mineable/pickaxe.json
 2908db8a299c25253b14333cff5e66397473d7b7 data/warfare/loot_table/blocks/mechanical_turret.json
+f0a97ad30ab11183d3a8d22514ba5902229a7787 data/warfare/loot_table/blocks/rocket_controller.json

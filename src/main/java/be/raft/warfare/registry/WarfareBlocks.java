@@ -2,6 +2,7 @@ package be.raft.warfare.registry;
 
 import be.raft.warfare.CreateWarfare;
 import be.raft.warfare.block.MechanicalTurretBlock;
+import be.raft.warfare.block.RocketControllerBlock;
 import com.simibubi.create.foundation.data.*;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import net.minecraft.world.item.BlockItem;
@@ -24,6 +25,15 @@ public class WarfareBlocks {
                             .build()
                     )
             )
+            .item(BlockItem::new)
+            .transform(customItemModel())
+            .register();
+
+    public static final BlockEntry<RocketControllerBlock> ROCKET_CONTROLLER = REGISTRATE.block("rocket_controller", RocketControllerBlock::new)
+            .initialProperties(SharedProperties::softMetal)
+            .properties(prop -> prop.mapColor(MapColor.TERRACOTTA_YELLOW))
+            .transform(TagGen.axeOrPickaxe())
+            .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), AssetLookup.partialBaseModel(ctx, prov)))
             .item(BlockItem::new)
             .transform(customItemModel())
             .register();

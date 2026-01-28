@@ -1,5 +1,6 @@
 {
   "values": [
-    "warfare:mechanical_turret"
+    "warfare:mechanical_turret",
+    "warfare:rocket_controller"
   ]
 }

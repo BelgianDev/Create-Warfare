@@ -1,0 +1,23 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "warfare:block/rocket_controller",
+		"particle": "warfare:block/rocket_controller"
+	},
+	"elements": [
+		{
+			"from": [-1, 0, -1],
+			"to": [2, 5, 2],
+			"rotation": {"angle": 0, "axis": "y", "origin": [-1, 3, 0]},
+			"faces": {
+				"north": {"uv": [12, 11, 15, 16], "texture": "#0"},
+				"east": {"uv": [12, 11, 15, 16], "texture": "#0"},
+				"south": {"uv": [12, 11, 15, 16], "texture": "#0"},
+				"west": {"uv": [12, 11, 15, 16], "texture": "#0"},
+				"up": {"uv": [9, 11, 12, 14], "texture": "#0"},
+				"down": {"uv": [9, 11, 12, 14], "texture": "#0"}
+			}
+		}
+	]
+}

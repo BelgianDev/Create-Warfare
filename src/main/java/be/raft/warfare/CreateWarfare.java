@@ -31,7 +31,7 @@ public class CreateWarfare {
         REGISTRATE.registerEventListeners(bus);
 
         WarfarePartialModels.prepare();
-        WarfareBlockEntities.register();
+        WarfareBlockEntities.register(bus);
         WarfareBlocks.register();
         WarfareItems.register();
         WarfareEntities.register();

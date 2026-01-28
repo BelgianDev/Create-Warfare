@@ -1,0 +1,64 @@
+{
+  "variants": {
+    "assembling=false,facing=east,waterlogged=false": {
+      "model": "warfare:block/rocket_controller/block",
+      "y": 90
+    },
+    "assembling=false,facing=east,waterlogged=true": {
+      "model": "warfare:block/rocket_controller/block",
+      "y": 90
+    },
+    "assembling=false,facing=north,waterlogged=false": {
+      "model": "warfare:block/rocket_controller/block"
+    },
+    "assembling=false,facing=north,waterlogged=true": {
+      "model": "warfare:block/rocket_controller/block"
+    },
+    "assembling=false,facing=south,waterlogged=false": {
+      "model": "warfare:block/rocket_controller/block",
+      "y": 180
+    },
+    "assembling=false,facing=south,waterlogged=true": {
+      "model": "warfare:block/rocket_controller/block",
+      "y": 180
+    },
+    "assembling=false,facing=west,waterlogged=false": {
+      "model": "warfare:block/rocket_controller/block",
+      "y": 270
+    },
+    "assembling=false,facing=west,waterlogged=true": {
+      "model": "warfare:block/rocket_controller/block",
+      "y": 270
+    },
+    "assembling=true,facing=east,waterlogged=false": {
+      "model": "warfare:block/rocket_controller/block",
+      "y": 90
+    },
+    "assembling=true,facing=east,waterlogged=true": {
+      "model": "warfare:block/rocket_controller/block",
+      "y": 90
+    },
+    "assembling=true,facing=north,waterlogged=false": {
+      "model": "warfare:block/rocket_controller/block"
+    },
+    "assembling=true,facing=north,waterlogged=true": {
+      "model": "warfare:block/rocket_controller/block"
+    },
+    "assembling=true,facing=south,waterlogged=false": {
+      "model": "warfare:block/rocket_controller/block",
+      "y": 180
+    },
+    "assembling=true,facing=south,waterlogged=true": {
+      "model": "warfare:block/rocket_controller/block",
+      "y": 180
+    },
+    "assembling=true,facing=west,waterlogged=false": {
+      "model": "warfare:block/rocket_controller/block",
+      "y": 270
+    },
+    "assembling=true,facing=west,waterlogged=true": {
+      "model": "warfare:block/rocket_controller/block",
+      "y": 270
+    }
+  }
+}

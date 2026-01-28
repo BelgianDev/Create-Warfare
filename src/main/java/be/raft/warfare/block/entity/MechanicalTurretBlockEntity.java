@@ -97,7 +97,7 @@ public class MechanicalTurretBlockEntity extends TurretBlockEntity<LivingEntity>
             this.nozzleLeftScale.tickChaser();
             this.nozzleRightScale.tickChaser();
 
-            if (this.hasTarget() && this.turretSettled() && this.getSpeed() != 0) {
+            if (this.hasTarget() && this.turretSettled() && this.getSpeed() != 0 && this.isBulletAvailable()) {
                 this.animationTick++;
                 float oscillation = 1.05f + Mth.sin(this.animationTick * 2.5f) * 0.03f;
                 

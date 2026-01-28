@@ -51,16 +51,20 @@ public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticB
     private static final int TARGET_REFRESH_RATE = 4 * 20; // TODO: Replace with a config option.
     private static final int DEFAULT_CLIENT_REFRESH_RATE = 5 * 20;
 
+    // Network (This may be overkill, but it's to prevent massive bases from ruining the network bandwidth of the server :>)
+    private static final byte TARGET_UPDATE = 0x01;
+    private static final byte INVENTORY_UPDATE = 0x02;
+
     protected ScrollOptionBehaviour<TargetingMode> targetingMode;
 
     // Server
     private int targetRefreshCounter;
     private boolean targetRefreshingEnabled;
+    private byte nextPacketType;
 
     private int clientRefreshRate;
     private int clientRefreshCounter;
 
-    // Inventory (Both)
     protected final TurretItemHandler itemHandler;
     private ItemStack magazine;
 
@@ -72,10 +76,14 @@ public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticB
     private boolean targetChanged;
     private Position lastTargetPos;
 
+    // Client
+    private int bulletCount;
+
     public TurretBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
         this.targetRefreshCounter = TARGET_REFRESH_RATE;
         this.targetRefreshingEnabled = true;
+        this.nextPacketType = TARGET_UPDATE;
 
         this.clientRefreshRate = DEFAULT_CLIENT_REFRESH_RATE;
         this.clientRefreshCounter = this.clientRefreshRate;
@@ -112,19 +120,17 @@ public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticB
             this.targetChanged = false;
         }
 
-        if (this.hasTarget() && this.turretSettled()) {
+        if (this.hasTarget() && this.turretSettled() && this.isBulletAvailable()) {
             this.shoot();
-
-            if (this.level.isClientSide)
-                return;
-
-            this.targetRefreshCounter--;
-            if (this.targetRefreshCounter <= 0 && this.targetRefreshingEnabled)
-                this.lookForTarget();
+            this.consumeBullet();
         }
 
         if (this.level.isClientSide)
             return;
+
+        this.targetRefreshCounter--;
+        if (this.targetRefreshCounter <= 0 && this.targetRefreshingEnabled)
+            this.lookForTarget();
 
         this.clientRefreshCounter--;
         if (this.clientRefreshCounter <= 0 && this.hasTarget()) {
@@ -156,8 +162,10 @@ public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticB
     protected void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
         super.write(compound, registries, clientPacket);
 
-        if (!clientPacket)
+        if (!clientPacket) {
+            compound.put("magazine", this.magazine.saveOptional(registries));
             return;
+        }
 
         if (!this.hasTarget()) {
             compound.putInt("target", -1);
@@ -178,8 +186,12 @@ public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticB
     protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(compound, registries, clientPacket);
 
-        if (!clientPacket)
+        if (!clientPacket) {
+            if (compound.contains("magazine") && !compound.getCompound("magazine").isEmpty())
+                this.magazine = ItemStack.parse(registries, compound.get("magazine")).orElse(ItemStack.EMPTY);
+
             return;
+        }
 
         int entityId = compound.getInt("target");
         if (!compound.contains("x") && entityId == -1) { // Clear entity target.
@@ -220,6 +232,22 @@ public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticB
     }
 
     /**
+     * Check whether a bullet is available in the magazine.
+     *
+     * @return {@code true} if a bullet is available, {@code false} otherwise.
+     */
+    public final boolean isBulletAvailable() {
+        return this.magazine.getCount() > 0;
+    }
+
+    /**
+     * Consume a bullet from the magazine.
+     */
+    public final void consumeBullet() {
+        this.magazine.shrink(1);
+    }
+
+    /**
      * Retrieve the magazine item the turret uses.
      *
      * @return magazine item.
@@ -235,6 +263,10 @@ public abstract class TurretBlockEntity<E extends LivingEntity> extends KineticB
      */
     public void setMagazine(ItemStack magazine) {
         this.magazine = magazine;
+
+        this.nextPacketType = INVENTORY_UPDATE;
+        this.notifyUpdate();
+        this.nextPacketType = TARGET_UPDATE;
     }
 
     /**

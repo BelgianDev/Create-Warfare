@@ -1,5 +1,6 @@
 {
   "block.warfare.mechanical_turret": "Mechanical Turret",
+  "block.warfare.rocket_controller": "Rocket Controller",
   "death.attack.warfare.bullet": "%1$s was turned into swiss cheese",
   "entity.warfare.bullet": "Bullet",
   "item.warfare.bullet": "Bullet",
