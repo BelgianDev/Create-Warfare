@@ -7,6 +7,8 @@ import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
 import net.createmod.catnip.lang.FontHelper;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
@@ -33,6 +35,7 @@ public class CreateWarfare {
         WarfarePartialModels.prepare();
         WarfareBlockEntities.register(bus);
         WarfareBlocks.register();
+        WarfareDataComponents.register(bus);
         WarfareItems.register();
         WarfareEntities.register();
         WarfarePackets.register(container);
@@ -44,4 +47,7 @@ public class CreateWarfare {
         return ResourceLocation.fromNamespaceAndPath(ID, path);
     }
 
+    public static MutableComponent translatable(String key) {
+        return Component.translatable(ID + "." + key);
+    }
 }

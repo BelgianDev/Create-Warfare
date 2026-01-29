@@ -12,6 +12,12 @@ public class WarfareShapes {
 
             TURRET_CEILLING = shape(2, 6, 2, 14, 16, 14).add(3, 2, 3, 13, 16, 13)
                     .add(0, 10, 0, 16, 16, 16)
+                    .build(),
+
+            ROCKET_CONTROLLER = shape(0, 0, 0, 16, 2, 16).add(1, 0, 1, 15, 13, 15)
+                    .build(),
+
+            LAUNCH_PAD = shape(0, 0, 0, 16, 7, 16)
                     .build();
 
 

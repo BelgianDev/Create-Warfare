@@ -1,6 +1,8 @@
 package be.raft.warfare.registry;
 
 import be.raft.warfare.CreateWarfare;
+import be.raft.warfare.network.C2S.CreatePlatformSelectionPacket;
+import be.raft.warfare.network.C2S.RemovePlatformSelectionPacket;
 import be.raft.warfare.network.S2C.BulletImpactPacket;
 import com.simibubi.create.Create;
 import net.createmod.catnip.net.base.BasePacketPayload;
@@ -14,8 +16,11 @@ import java.util.Locale;
 
 public enum WarfarePackets implements BasePacketPayload.PacketTypeProvider {
     // Server -> Client
-    BULLET_IMPACT(BulletImpactPacket.class, BulletImpactPacket.CODEC)
+    BULLET_IMPACT(BulletImpactPacket.class, BulletImpactPacket.CODEC),
 
+    // Client -> Server
+    CREATE_PLATFORM_SELECTION(CreatePlatformSelectionPacket.class, CreatePlatformSelectionPacket.CODEC),
+    REMOVE_PLATFORM_SELECTION(RemovePlatformSelectionPacket.class, RemovePlatformSelectionPacket.CODEC)
     ;
 
     private final CatnipPacketRegistry.PacketType<?> type;

@@ -1,13 +1,25 @@
 {
+  "block.warfare.launch_pad": "Launch Pad",
   "block.warfare.mechanical_turret": "Mechanical Turret",
   "block.warfare.rocket_controller": "Rocket Controller",
   "death.attack.warfare.bullet": "%1$s was turned into swiss cheese",
   "entity.warfare.bullet": "Bullet",
+  "entity.warfare.platform": "Platform",
   "item.warfare.bullet": "Bullet",
   "itemGroup.warfare": "Create: Warfare",
   "ui.warfare.turret.targeting_mode": "Turret Targeting Mode",
   "ui.warfare.turret.targeting_mode.all": "All",
   "ui.warfare.turret.targeting_mode.monsters": "Monsters",
   "ui.warfare.turret.targeting_mode.passives": "Passives",
-  "ui.warfare.turret.targeting_mode.players": "Players"
+  "ui.warfare.turret.targeting_mode.players": "Players",
+  "warfare.rocket_controller.big": "Selected platform is too big!",
+  "warfare.rocket_controller.clear": "Selection discarded",
+  "warfare.rocket_controller.confirm": "Click again to confirm",
+  "warfare.rocket_controller.discard": "Sneak-click to discard selection",
+  "warfare.rocket_controller.first_pos": "Selected first position",
+  "warfare.rocket_controller.intersects": "Selected platform intersects with another platform!",
+  "warfare.rocket_controller.not_flat": "The launch pad must be flat!",
+  "warfare.rocket_controller.not_pad": "You must select a launch pad!",
+  "warfare.rocket_controller.small": "Selected platform is too small!",
+  "warfare.rocket_controller.success": "Platform selection confirmed"
 }

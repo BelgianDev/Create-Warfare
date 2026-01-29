@@ -1,13 +1,25 @@
 {
+  "block.warfare.launch_pad": "pɐԀ ɥɔunɐꞀ",
   "block.warfare.mechanical_turret": "ʇǝɹɹn⟘ ןɐɔıuɐɥɔǝW",
   "block.warfare.rocket_controller": "ɹǝןןoɹʇuoƆ ʇǝʞɔoᴚ",
   "death.attack.warfare.bullet": "ǝsǝǝɥɔ ssıʍs oʇuı pǝuɹnʇ sɐʍ %1$s",
   "entity.warfare.bullet": "ʇǝןןnᗺ",
+  "entity.warfare.platform": "ɯɹoɟʇɐןԀ",
   "item.warfare.bullet": "ʇǝןןnᗺ",
   "itemGroup.warfare": "ǝɹɐɟɹɐM :ǝʇɐǝɹƆ",
   "ui.warfare.turret.targeting_mode": "ǝpoW buıʇǝbɹɐ⟘ ʇǝɹɹn⟘",
   "ui.warfare.turret.targeting_mode.all": "ןןⱯ",
   "ui.warfare.turret.targeting_mode.monsters": "sɹǝʇsuoW",
   "ui.warfare.turret.targeting_mode.passives": "sǝʌıssɐԀ",
-  "ui.warfare.turret.targeting_mode.players": "sɹǝʎɐןԀ"
+  "ui.warfare.turret.targeting_mode.players": "sɹǝʎɐןԀ",
+  "warfare.rocket_controller.big": "¡bıq ooʇ sı ɯɹoɟʇɐןd pǝʇɔǝןǝS",
+  "warfare.rocket_controller.clear": "pǝpɹɐɔsıp uoıʇɔǝןǝS",
+  "warfare.rocket_controller.confirm": "ɯɹıɟuoɔ oʇ uıɐbɐ ʞɔıןƆ",
+  "warfare.rocket_controller.discard": "uoıʇɔǝןǝs pɹɐɔsıp oʇ ʞɔıןɔ-ʞɐǝuS",
+  "warfare.rocket_controller.first_pos": "uoıʇısod ʇsɹıɟ pǝʇɔǝןǝS",
+  "warfare.rocket_controller.intersects": "¡ɯɹoɟʇɐןd ɹǝɥʇouɐ ɥʇıʍ sʇɔǝsɹǝʇuı ɯɹoɟʇɐןd pǝʇɔǝןǝS",
+  "warfare.rocket_controller.not_flat": "¡ʇɐןɟ ǝq ʇsnɯ pɐd ɥɔunɐן ǝɥ⟘",
+  "warfare.rocket_controller.not_pad": "¡pɐd ɥɔunɐן ɐ ʇɔǝןǝs ʇsnɯ noʎ",
+  "warfare.rocket_controller.small": "¡ןןɐɯs ooʇ sı ɯɹoɟʇɐןd pǝʇɔǝןǝS",
+  "warfare.rocket_controller.success": "pǝɯɹıɟuoɔ uoıʇɔǝןǝs ɯɹoɟʇɐןԀ"
 }

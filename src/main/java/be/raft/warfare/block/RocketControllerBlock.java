@@ -33,7 +33,7 @@ public class RocketControllerBlock extends HorizontalDirectionalBlock implements
     public RocketControllerBlock(Properties properties) {
         super(properties);
 
-        registerDefaultState(defaultBlockState()
+        registerDefaultState(this.defaultBlockState()
                 .setValue(FACING, Direction.NORTH)
                 .setValue(ASSEMBLING, false)
                 .setValue(WATERLOGGED, false)

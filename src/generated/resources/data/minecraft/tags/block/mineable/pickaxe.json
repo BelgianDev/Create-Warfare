@@ -1,6 +1,7 @@
 {
   "values": [
     "warfare:mechanical_turret",
-    "warfare:rocket_controller"
+    "warfare:rocket_controller",
+    "warfare:launch_pad"
   ]
 }

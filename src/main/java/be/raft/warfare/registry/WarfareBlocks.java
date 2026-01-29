@@ -1,8 +1,10 @@
 package be.raft.warfare.registry;
 
 import be.raft.warfare.CreateWarfare;
+import be.raft.warfare.block.LaunchPadBlock;
 import be.raft.warfare.block.MechanicalTurretBlock;
 import be.raft.warfare.block.RocketControllerBlock;
+import be.raft.warfare.item.RocketControllerBlockItem;
 import com.simibubi.create.foundation.data.*;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import net.minecraft.world.item.BlockItem;
@@ -34,8 +36,16 @@ public class WarfareBlocks {
             .properties(prop -> prop.mapColor(MapColor.TERRACOTTA_YELLOW))
             .transform(TagGen.axeOrPickaxe())
             .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), AssetLookup.partialBaseModel(ctx, prov)))
-            .item(BlockItem::new)
+            .item(RocketControllerBlockItem::new)
             .transform(customItemModel())
+            .register();
+
+    public static final BlockEntry<LaunchPadBlock> LAUNCH_PAD = REGISTRATE.block("launch_pad", LaunchPadBlock::new)
+            .initialProperties(SharedProperties::softMetal)
+            .properties(prop -> prop.mapColor(MapColor.TERRACOTTA_GRAY).noOcclusion())
+            .transform(TagGen.pickaxeOnly())
+            .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(), AssetLookup.standardModel(ctx, prov)))
+            .item(BlockItem::new).build()
             .register();
 
     public static void register() {}
