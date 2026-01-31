@@ -2,6 +2,7 @@ package be.raft.warfare.block.entity;
 
 import be.raft.warfare.block.RocketControllerBlock;
 import be.raft.warfare.entity.PlatformSelectionEntity;
+import be.raft.warfare.registry.WarfareBlocks;
 import be.raft.warfare.registry.WarfareDataComponents;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -10,12 +11,14 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.UUID;
 
@@ -123,19 +126,37 @@ public class RocketControllerBlockEntity extends SmartBlockEntity {
         return this.getBlockState().getValue(RocketControllerBlock.ASSEMBLING);
     }
 
+    private boolean toggleAssembly() {
+        if (!this.platformEntityAccessible())
+            return false;
+
+        this.updateBlockState(this.getBlockState().cycle(RocketControllerBlock.ASSEMBLING));
+        return true;
+    }
+
     public boolean enterAssembly() {
         if (this.isInAssembly())
             return false;
 
-        this.updateBlockState(this.getBlockState().setValue(RocketControllerBlock.ASSEMBLING, true));
+        if (!this.toggleAssembly())
+            return false;
+
+        this.cachedSelectionEntity.getCachedValidThrustersPos().forEach(pos -> {
+            this.level.setBlock(pos.atY(pos.getY() + 1), Blocks.ANDESITE.defaultBlockState(), Block.UPDATE_ALL);
+        });
+
         return true;
     }
 
     public boolean exitAssembly() {
-        if (!this.isInAssembly())
+        if (!this.isInAssembly() || !this.platformEntityAccessible())
             return false;
 
-        this.updateBlockState(this.getBlockState().setValue(RocketControllerBlock.ASSEMBLING, false));
+        if (!this.toggleAssembly())
+            return false;
+
+
+
         return true;
     }
 }

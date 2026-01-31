@@ -1,5 +1,6 @@
 package be.raft.warfare.entity;
 
+import be.raft.warfare.registry.WarfareBlocks;
 import be.raft.warfare.registry.WarfareEntities;
 import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
@@ -22,17 +23,27 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 /**
  * This is a modified version of {@link com.simibubi.create.content.contraptions.glue.SuperGlueEntity} from Create which is licensed under <a href="https://github.com/Creators-of-Create/Create?tab=License-1-ov-file#readme">MIT - The Create Team / The Creators of Create</a>
  */
 public class PlatformSelectionEntity extends Entity implements IEntityWithComplexSpawn {
+    private final Set<BlockPos> cachedValidThrustersPos;
     private UUID platformIdentifier;
+
+    private int lazyTick;
+    private boolean thrustersPosDirty;
 
     public PlatformSelectionEntity(EntityType<?> type, Level world) {
         super(type, world);
+        this.cachedValidThrustersPos = new HashSet<>();
         this.platformIdentifier = UUID.randomUUID();
+
+        this.lazyTick = 20;
+        this.thrustersPosDirty = true;
     }
 
     public PlatformSelectionEntity(Level world, AABB boundingBox, UUID platformIdentifier) {
@@ -67,6 +78,69 @@ public class PlatformSelectionEntity extends Entity implements IEntityWithComple
 
         if (getBoundingBox().getXsize() == 0)
             discard();
+
+        this.lazyTick--;
+        if (this.lazyTick <= 0) {
+            this.lazyTick();
+            this.lazyTick = 20;
+        }
+    }
+
+    private void lazyTick() {
+        if (!this.thrustersPosDirty)
+            return;
+
+        this.computeValidThrustersPos();
+    }
+
+    public boolean areCachedThrustersDirty() {
+        return this.thrustersPosDirty;
+    }
+
+    public void markCachedThrustersAsDirty() {
+        this.thrustersPosDirty = true;
+    }
+
+    public Set<BlockPos> getCachedValidThrustersPos() {
+        return Set.copyOf(this.cachedValidThrustersPos);
+    }
+
+    public void computeValidThrustersPos() {
+        System.out.println("Computing thrusters!");
+
+        this.cachedValidThrustersPos.clear();
+
+        int y = (int) this.getBoundingBox().minY;
+        int minX = (int) Math.floor(this.getBoundingBox().minX);
+        int minZ = (int) Math.floor(this.getBoundingBox().minZ);
+
+        int maxX = (int) Math.ceil(this.getBoundingBox().maxX) - 1;
+        int maxZ = (int) Math.ceil(this.getBoundingBox().maxZ) - 1;
+
+        if (maxX - minX + 1 < 3 || maxZ - minZ + 1 < 3)
+            return;
+
+        BlockPos.MutableBlockPos cursor = new BlockPos.MutableBlockPos();
+        for (int x = minX + 1; x <= maxX - 1; x++) {
+            for (int z = minZ + 1; z <= maxZ - 1; z++) {
+
+                boolean valid = true;
+                for (int dx = -1; dx <= 1 && valid; dx++) {
+                    for (int dz = -1; dz <= 1; dz++) {
+                        cursor.set(x + dx, y, z + dz);
+                        if (!this.level().getBlockState(cursor).is(WarfareBlocks.LAUNCH_PAD.get())) {
+                            valid = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (valid)
+                    this.cachedValidThrustersPos.add(new BlockPos(x, y, z));
+            }
+        }
+
+        this.thrustersPosDirty = false;
     }
 
     @Override
