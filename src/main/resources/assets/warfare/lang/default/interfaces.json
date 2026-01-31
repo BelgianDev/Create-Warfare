@@ -18,5 +18,12 @@
   "warfare.rocket_controller.intersects": "Selected platform intersects with another platform!",
   "warfare.rocket_controller.discard": "Sneak-click to discard selection",
   "warfare.rocket_controller.clear": "Selection discarded",
-  "warfare.rocket_controller.success": "Platform selection confirmed"
+  "warfare.rocket_controller.success": "Platform selection confirmed",
+  "warfare.rocket_controller.unbound": "Could not bind to platform!",
+
+  "warfare.rocket_controller.gui.close_window": "Close Window",
+  "warfare.rocket_controller.gui.cancel_assembly": "Cancel Assembly",
+  "warfare.rocket_controller.gui.assemble": "Assemble Rocket",
+  "warfare.rocket_controller.gui.enter_assembly": "Create Rocket",
+  "warfare.rocket_controller.gui.launch": "Launch"
 }

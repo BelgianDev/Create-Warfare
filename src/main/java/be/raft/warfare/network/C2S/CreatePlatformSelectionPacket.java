@@ -2,17 +2,25 @@ package be.raft.warfare.network.C2S;
 
 import be.raft.warfare.CreateWarfare;
 import be.raft.warfare.entity.PlatformSelectionEntity;
+import be.raft.warfare.registry.WarfareBlocks;
+import be.raft.warfare.registry.WarfareDataComponents;
+import be.raft.warfare.registry.WarfareItems;
 import be.raft.warfare.registry.WarfarePackets;
 import be.raft.warfare.rocket.platform.RocketPlatformSelectionHelper;
 import com.simibubi.create.content.contraptions.glue.SuperGlueEntity;
 import io.netty.buffer.ByteBuf;
 import net.createmod.catnip.net.base.ServerboundPacketPayload;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+
+import java.util.UUID;
 
 public record CreatePlatformSelectionPacket(BlockPos from, BlockPos to) implements ServerboundPacketPayload {
     public static final StreamCodec<ByteBuf, CreatePlatformSelectionPacket> CODEC = StreamCodec.composite(
@@ -33,9 +41,18 @@ public record CreatePlatformSelectionPacket(BlockPos from, BlockPos to) implemen
         if (RocketPlatformSelectionHelper.rocketPlatformIntersects(player.level(), this.from, this.to))
             return;
 
+        ItemStack stack = player.getMainHandItem();
+        if (!stack.is(WarfareBlocks.ROCKET_CONTROLLER.asItem()))
+            return;
+
+        UUID platformIdentifier = UUID.randomUUID();
         AABB boundingBox = SuperGlueEntity.span(this.from, this.to);
-        PlatformSelectionEntity entity = new PlatformSelectionEntity(player.level(), boundingBox);
+
+        PlatformSelectionEntity entity = new PlatformSelectionEntity(player.level(), boundingBox, platformIdentifier);
         player.level().addFreshEntity(entity);
+
+        stack.set(WarfareDataComponents.ROCKET_CONTROLLER_PLATFORM, platformIdentifier);
+        stack.set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
     }
 
     @Override

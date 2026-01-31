@@ -22,13 +22,23 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.entity.IEntityWithComplexSpawn;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.UUID;
+
+/**
+ * This is a modified version of {@link com.simibubi.create.content.contraptions.glue.SuperGlueEntity} from Create which is licensed under <a href="https://github.com/Creators-of-Create/Create?tab=License-1-ov-file#readme">MIT - The Create Team / The Creators of Create</a>
+ */
 public class PlatformSelectionEntity extends Entity implements IEntityWithComplexSpawn {
+    private UUID platformIdentifier;
+
     public PlatformSelectionEntity(EntityType<?> type, Level world) {
         super(type, world);
+        this.platformIdentifier = UUID.randomUUID();
     }
 
-    public PlatformSelectionEntity(Level world, AABB boundingBox) {
+    public PlatformSelectionEntity(Level world, AABB boundingBox, UUID platformIdentifier) {
         this(WarfareEntities.PLATFORM_SELECTION.get(), world);
+        this.platformIdentifier = platformIdentifier;
+
         setBoundingBox(boundingBox);
         resetPositionToBB();
     }
@@ -69,7 +79,7 @@ public class PlatformSelectionEntity extends Entity implements IEntityWithComple
     }
 
     @Override
-    public void move(MoverType typeIn, Vec3 pos) {
+    public void move(@NotNull MoverType typeIn, @NotNull Vec3 pos) {
         if (!level().isClientSide && isAlive() && pos.lengthSqr() > 0.0D)
             discard();
     }
@@ -86,25 +96,29 @@ public class PlatformSelectionEntity extends Entity implements IEntityWithComple
     }
 
     @Override
-    public void push(Entity entityIn) {
+    public void push(@NotNull Entity entityIn) {
         super.push(entityIn);
     }
 
     @Override
-    public InteractionResult interact(Player player, InteractionHand hand) {
+    public @NotNull InteractionResult interact(@NotNull Player player, @NotNull InteractionHand hand) {
         return InteractionResult.PASS;
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag compound) {
+    public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         Vec3 position = position();
         writeBoundingBox(compound, getBoundingBox().move(position.scale(-1)));
+
+        compound.putUUID("PlatformIdentifier", this.platformIdentifier);
     }
 
     @Override
-    public void readAdditionalSaveData(CompoundTag compound) {
+    public void readAdditionalSaveData(@NotNull CompoundTag compound) {
         Vec3 position = position();
         setBoundingBox(readBoundingBox(compound).move(position));
+
+        this.platformIdentifier = compound.getUUID("PlatformIdentifier");
     }
 
     public static void writeBoundingBox(CompoundTag compound, AABB bb) {
@@ -166,5 +180,9 @@ public class PlatformSelectionEntity extends Entity implements IEntityWithComple
     @Override
     public @NotNull PushReaction getPistonPushReaction() {
         return PushReaction.IGNORE;
+    }
+
+    public UUID getPlatformIdentifier() {
+        return platformIdentifier;
     }
 }

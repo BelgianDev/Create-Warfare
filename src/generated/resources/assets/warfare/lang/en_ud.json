@@ -17,9 +17,15 @@
   "warfare.rocket_controller.confirm": "ɯɹıɟuoɔ oʇ uıɐbɐ ʞɔıןƆ",
   "warfare.rocket_controller.discard": "uoıʇɔǝןǝs pɹɐɔsıp oʇ ʞɔıןɔ-ʞɐǝuS",
   "warfare.rocket_controller.first_pos": "uoıʇısod ʇsɹıɟ pǝʇɔǝןǝS",
+  "warfare.rocket_controller.gui.assemble": "ʇǝʞɔoᴚ ǝןqɯǝssⱯ",
+  "warfare.rocket_controller.gui.cancel_assembly": "ʎןqɯǝssⱯ ןǝɔuɐƆ",
+  "warfare.rocket_controller.gui.close_window": "ʍopuıM ǝsoןƆ",
+  "warfare.rocket_controller.gui.enter_assembly": "ʇǝʞɔoᴚ ǝʇɐǝɹƆ",
+  "warfare.rocket_controller.gui.launch": "ʇǝʞɔoᴚ ɥɔunɐꞀ",
   "warfare.rocket_controller.intersects": "¡ɯɹoɟʇɐןd ɹǝɥʇouɐ ɥʇıʍ sʇɔǝsɹǝʇuı ɯɹoɟʇɐןd pǝʇɔǝןǝS",
   "warfare.rocket_controller.not_flat": "¡ʇɐןɟ ǝq ʇsnɯ pɐd ɥɔunɐן ǝɥ⟘",
   "warfare.rocket_controller.not_pad": "¡pɐd ɥɔunɐן ɐ ʇɔǝןǝs ʇsnɯ noʎ",
   "warfare.rocket_controller.small": "¡ןןɐɯs ooʇ sı ɯɹoɟʇɐןd pǝʇɔǝןǝS",
-  "warfare.rocket_controller.success": "pǝɯɹıɟuoɔ uoıʇɔǝןǝs ɯɹoɟʇɐןԀ"
+  "warfare.rocket_controller.success": "pǝɯɹıɟuoɔ uoıʇɔǝןǝs ɯɹoɟʇɐןԀ",
+  "warfare.rocket_controller.unbound": "¡ɯɹoɟʇɐןd oʇ puıq ʇou pןnoƆ"
 }

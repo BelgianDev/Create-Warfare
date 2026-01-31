@@ -3,6 +3,7 @@ package be.raft.warfare.registry;
 import be.raft.warfare.CreateWarfare;
 import be.raft.warfare.network.C2S.CreatePlatformSelectionPacket;
 import be.raft.warfare.network.C2S.RemovePlatformSelectionPacket;
+import be.raft.warfare.network.C2S.UpdateRocketControllerPacket;
 import be.raft.warfare.network.S2C.BulletImpactPacket;
 import com.simibubi.create.Create;
 import net.createmod.catnip.net.base.BasePacketPayload;
@@ -20,7 +21,10 @@ public enum WarfarePackets implements BasePacketPayload.PacketTypeProvider {
 
     // Client -> Server
     CREATE_PLATFORM_SELECTION(CreatePlatformSelectionPacket.class, CreatePlatformSelectionPacket.CODEC),
-    REMOVE_PLATFORM_SELECTION(RemovePlatformSelectionPacket.class, RemovePlatformSelectionPacket.CODEC)
+    REMOVE_PLATFORM_SELECTION(RemovePlatformSelectionPacket.class, RemovePlatformSelectionPacket.CODEC),
+
+    // Client -> Server BlockEntity Config
+    UPDATE_ROCKET_CONTROLLER(UpdateRocketControllerPacket.class, UpdateRocketControllerPacket.CODEC)
     ;
 
     private final CatnipPacketRegistry.PacketType<?> type;

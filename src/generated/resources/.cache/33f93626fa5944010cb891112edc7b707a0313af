@@ -1,9 +1,9 @@
-// 1.21.1	2026-01-29T16:04:26.70419003	Registrate Provider for warfare [Registries, Data Maps, Recipes, Advancements, Loot Tables, Tags (blocks), Tags (enchantments), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider]
+// 1.21.1	2026-01-31T00:34:34.275955914	Registrate Provider for warfare [Registries, Data Maps, Recipes, Advancements, Loot Tables, Tags (blocks), Tags (enchantments), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider]
 a645174d26e535e35833a00801c47f0fc8ebeea5 assets/warfare/blockstates/launch_pad.json
 bbb9121228cb44011c661e7d3d927ff42c66f88b assets/warfare/blockstates/mechanical_turret.json
-0ed2bbc8410c257e0744ef3f7274d3463c552f6d assets/warfare/blockstates/rocket_controller.json
-6126532675c9a1164158625239c73118af260961 assets/warfare/lang/en_ud.json
-89811c942b6c849f9db78fcaf2d63573a2fdce25 assets/warfare/lang/en_us.json
+e04e9371b5c9fd1a7f37b73e0db4d83be306601d assets/warfare/blockstates/rocket_controller.json
+bae1eeb98459a17692d4253d3a3700271a6c528a assets/warfare/lang/en_ud.json
+c13a915b521d225b0276e59877fab87c3ccd578a assets/warfare/lang/en_us.json
 4f4516de0849f1ae9657c9ffdd37efb10cf8a41a assets/warfare/models/item/bullet.json
 82345fff2c60944512ca9c3243f0b360efa21d9c assets/warfare/models/item/launch_pad.json
 ebca13432e893322009d5e7fdaffbadcd289ef19 assets/warfare/models/item/mechanical_turret.json

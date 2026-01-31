@@ -8,6 +8,7 @@ import be.raft.warfare.item.RocketControllerBlockItem;
 import com.simibubi.create.foundation.data.*;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
 
@@ -35,7 +36,13 @@ public class WarfareBlocks {
             .initialProperties(SharedProperties::softMetal)
             .properties(prop -> prop.mapColor(MapColor.TERRACOTTA_YELLOW))
             .transform(TagGen.axeOrPickaxe())
-            .blockstate((ctx, prov) -> prov.horizontalBlock(ctx.getEntry(), AssetLookup.partialBaseModel(ctx, prov)))
+            .blockstate((ctx, prov) -> prov.getVariantBuilder(ctx.get())
+                    .forAllStates(state -> ConfiguredModel.builder()
+                            .modelFile(state.getValue(RocketControllerBlock.NO_DYNAMIC_BULB) ? prov.models().getExistingFile(prov.modLoc("block/rocket_controller/item")) : AssetLookup.partialBaseModel(ctx, prov))
+                            .rotationY(((int) state.getValue(BlockStateProperties.HORIZONTAL_FACING).toYRot() + 180) % 360)
+                            .build()
+                    )
+            )
             .item(RocketControllerBlockItem::new)
             .transform(customItemModel())
             .register();

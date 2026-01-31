@@ -6,6 +6,7 @@ import be.raft.warfare.item.RocketControllerBlockItem;
 import be.raft.warfare.network.C2S.CreatePlatformSelectionPacket;
 import be.raft.warfare.network.C2S.RemovePlatformSelectionPacket;
 import be.raft.warfare.registry.WarfareBlocks;
+import be.raft.warfare.registry.WarfareDataComponents;
 import com.google.common.base.Objects;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.AllSpecialTextures;
@@ -214,8 +215,9 @@ public class RocketPlatformSelectionHandler {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
         ClientLevel level = mc.level;
+        ItemStack stack = player.getMainHandItem();
 
-        if (!isController(player.getMainHandItem()) || !player.mayBuild())
+        if (!isController(stack) || !player.mayBuild())
             return false;
 
         if (attack) {
@@ -226,6 +228,10 @@ public class RocketPlatformSelectionHandler {
             selected = null;
             clusterCooldown = 0;
             return true;
+        }
+
+        if (stack.has(WarfareDataComponents.ROCKET_CONTROLLER_PLATFORM)) {
+            return false;
         }
 
         if (player.isShiftKeyDown()) {

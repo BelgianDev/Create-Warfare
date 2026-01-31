@@ -1,63 +1,123 @@
 {
   "variants": {
-    "assembling=false,facing=east,waterlogged=false": {
+    "assembling=false,facing=east,no_dynamic_bulb=false,waterlogged=false": {
       "model": "warfare:block/rocket_controller/block",
       "y": 90
     },
-    "assembling=false,facing=east,waterlogged=true": {
+    "assembling=false,facing=east,no_dynamic_bulb=false,waterlogged=true": {
       "model": "warfare:block/rocket_controller/block",
       "y": 90
     },
-    "assembling=false,facing=north,waterlogged=false": {
+    "assembling=false,facing=east,no_dynamic_bulb=true,waterlogged=false": {
+      "model": "warfare:block/rocket_controller/item",
+      "y": 90
+    },
+    "assembling=false,facing=east,no_dynamic_bulb=true,waterlogged=true": {
+      "model": "warfare:block/rocket_controller/item",
+      "y": 90
+    },
+    "assembling=false,facing=north,no_dynamic_bulb=false,waterlogged=false": {
       "model": "warfare:block/rocket_controller/block"
     },
-    "assembling=false,facing=north,waterlogged=true": {
+    "assembling=false,facing=north,no_dynamic_bulb=false,waterlogged=true": {
       "model": "warfare:block/rocket_controller/block"
     },
-    "assembling=false,facing=south,waterlogged=false": {
+    "assembling=false,facing=north,no_dynamic_bulb=true,waterlogged=false": {
+      "model": "warfare:block/rocket_controller/item"
+    },
+    "assembling=false,facing=north,no_dynamic_bulb=true,waterlogged=true": {
+      "model": "warfare:block/rocket_controller/item"
+    },
+    "assembling=false,facing=south,no_dynamic_bulb=false,waterlogged=false": {
       "model": "warfare:block/rocket_controller/block",
       "y": 180
     },
-    "assembling=false,facing=south,waterlogged=true": {
+    "assembling=false,facing=south,no_dynamic_bulb=false,waterlogged=true": {
       "model": "warfare:block/rocket_controller/block",
       "y": 180
     },
-    "assembling=false,facing=west,waterlogged=false": {
+    "assembling=false,facing=south,no_dynamic_bulb=true,waterlogged=false": {
+      "model": "warfare:block/rocket_controller/item",
+      "y": 180
+    },
+    "assembling=false,facing=south,no_dynamic_bulb=true,waterlogged=true": {
+      "model": "warfare:block/rocket_controller/item",
+      "y": 180
+    },
+    "assembling=false,facing=west,no_dynamic_bulb=false,waterlogged=false": {
       "model": "warfare:block/rocket_controller/block",
       "y": 270
     },
-    "assembling=false,facing=west,waterlogged=true": {
+    "assembling=false,facing=west,no_dynamic_bulb=false,waterlogged=true": {
       "model": "warfare:block/rocket_controller/block",
       "y": 270
     },
-    "assembling=true,facing=east,waterlogged=false": {
+    "assembling=false,facing=west,no_dynamic_bulb=true,waterlogged=false": {
+      "model": "warfare:block/rocket_controller/item",
+      "y": 270
+    },
+    "assembling=false,facing=west,no_dynamic_bulb=true,waterlogged=true": {
+      "model": "warfare:block/rocket_controller/item",
+      "y": 270
+    },
+    "assembling=true,facing=east,no_dynamic_bulb=false,waterlogged=false": {
       "model": "warfare:block/rocket_controller/block",
       "y": 90
     },
-    "assembling=true,facing=east,waterlogged=true": {
+    "assembling=true,facing=east,no_dynamic_bulb=false,waterlogged=true": {
       "model": "warfare:block/rocket_controller/block",
       "y": 90
     },
-    "assembling=true,facing=north,waterlogged=false": {
+    "assembling=true,facing=east,no_dynamic_bulb=true,waterlogged=false": {
+      "model": "warfare:block/rocket_controller/item",
+      "y": 90
+    },
+    "assembling=true,facing=east,no_dynamic_bulb=true,waterlogged=true": {
+      "model": "warfare:block/rocket_controller/item",
+      "y": 90
+    },
+    "assembling=true,facing=north,no_dynamic_bulb=false,waterlogged=false": {
       "model": "warfare:block/rocket_controller/block"
     },
-    "assembling=true,facing=north,waterlogged=true": {
+    "assembling=true,facing=north,no_dynamic_bulb=false,waterlogged=true": {
       "model": "warfare:block/rocket_controller/block"
     },
-    "assembling=true,facing=south,waterlogged=false": {
+    "assembling=true,facing=north,no_dynamic_bulb=true,waterlogged=false": {
+      "model": "warfare:block/rocket_controller/item"
+    },
+    "assembling=true,facing=north,no_dynamic_bulb=true,waterlogged=true": {
+      "model": "warfare:block/rocket_controller/item"
+    },
+    "assembling=true,facing=south,no_dynamic_bulb=false,waterlogged=false": {
       "model": "warfare:block/rocket_controller/block",
       "y": 180
     },
-    "assembling=true,facing=south,waterlogged=true": {
+    "assembling=true,facing=south,no_dynamic_bulb=false,waterlogged=true": {
       "model": "warfare:block/rocket_controller/block",
       "y": 180
     },
-    "assembling=true,facing=west,waterlogged=false": {
+    "assembling=true,facing=south,no_dynamic_bulb=true,waterlogged=false": {
+      "model": "warfare:block/rocket_controller/item",
+      "y": 180
+    },
+    "assembling=true,facing=south,no_dynamic_bulb=true,waterlogged=true": {
+      "model": "warfare:block/rocket_controller/item",
+      "y": 180
+    },
+    "assembling=true,facing=west,no_dynamic_bulb=false,waterlogged=false": {
       "model": "warfare:block/rocket_controller/block",
       "y": 270
     },
-    "assembling=true,facing=west,waterlogged=true": {
+    "assembling=true,facing=west,no_dynamic_bulb=false,waterlogged=true": {
       "model": "warfare:block/rocket_controller/block",
+      "y": 270
+    },
+    "assembling=true,facing=west,no_dynamic_bulb=true,waterlogged=false": {
+      "model": "warfare:block/rocket_controller/item",
+      "y": 270
+    },
+    "assembling=true,facing=west,no_dynamic_bulb=true,waterlogged=true": {
+      "model": "warfare:block/rocket_controller/item",
       "y": 270
     }
   }
