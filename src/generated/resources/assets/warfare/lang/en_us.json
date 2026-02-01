@@ -2,6 +2,7 @@
   "block.warfare.launch_pad": "Launch Pad",
   "block.warfare.mechanical_turret": "Mechanical Turret",
   "block.warfare.rocket_controller": "Rocket Controller",
+  "block.warfare.thruster": "Thruster",
   "death.attack.warfare.bullet": "%1$s was turned into swiss cheese",
   "entity.warfare.bullet": "Bullet",
   "entity.warfare.platform": "Platform",
@@ -21,11 +22,15 @@
   "warfare.rocket_controller.gui.cancel_assembly": "Cancel Assembly",
   "warfare.rocket_controller.gui.close_window": "Close Window",
   "warfare.rocket_controller.gui.enter_assembly": "Create Rocket",
-  "warfare.rocket_controller.gui.launch": "Launch Rocket",
+  "warfare.rocket_controller.gui.launch": "Launch",
   "warfare.rocket_controller.intersects": "Selected platform intersects with another platform!",
   "warfare.rocket_controller.not_flat": "The launch pad must be flat!",
   "warfare.rocket_controller.not_pad": "You must select a launch pad!",
   "warfare.rocket_controller.small": "Selected platform is too small!",
   "warfare.rocket_controller.success": "Platform selection confirmed",
-  "warfare.rocket_controller.unbound": "Could not bind to platform!"
+  "warfare.rocket_controller.unbound": "Could not bind to platform!",
+  "warfare.thruster.invalid_placement": "Thrusters can only be placed on the center block of a 3x3 launch platform!",
+  "warfare.thruster.no_platform": "Thruster can only be placed on a formed platform!",
+  "warfare.thruster.not_assembling": "Cannot place thrusters on a platform that's not being assembled!",
+  "warfare.thruster.not_pad": "Thruster can only be placed on a launch pad!"
 }

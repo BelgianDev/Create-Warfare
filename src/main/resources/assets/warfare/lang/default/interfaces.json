@@ -25,5 +25,10 @@
   "warfare.rocket_controller.gui.cancel_assembly": "Cancel Assembly",
   "warfare.rocket_controller.gui.assemble": "Assemble Rocket",
   "warfare.rocket_controller.gui.enter_assembly": "Create Rocket",
-  "warfare.rocket_controller.gui.launch": "Launch"
+  "warfare.rocket_controller.gui.launch": "Launch",
+
+  "warfare.thruster.not_pad": "Thruster can only be placed on a launch pad!",
+  "warfare.thruster.no_platform": "Thruster can only be placed on a formed platform!",
+  "warfare.thruster.invalid_placement": "Thrusters can only be placed on the center block of a 3x3 launch platform!",
+  "warfare.thruster.not_assembling": "Cannot place thrusters on a platform that's not being assembled!"
 }

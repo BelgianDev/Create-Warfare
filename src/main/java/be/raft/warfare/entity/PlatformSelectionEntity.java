@@ -31,19 +31,22 @@ import java.util.UUID;
  * This is a modified version of {@link com.simibubi.create.content.contraptions.glue.SuperGlueEntity} from Create which is licensed under <a href="https://github.com/Creators-of-Create/Create?tab=License-1-ov-file#readme">MIT - The Create Team / The Creators of Create</a>
  */
 public class PlatformSelectionEntity extends Entity implements IEntityWithComplexSpawn {
-    private final Set<BlockPos> cachedValidThrustersPos;
-    private UUID platformIdentifier;
+    private final Set<BlockPos> cachedAssemblyAreas;
+    private boolean cachedAssemblyAreasDirty;
 
+    private UUID platformIdentifier;
+    private boolean isAssembling;
     private int lazyTick;
-    private boolean thrustersPosDirty;
 
     public PlatformSelectionEntity(EntityType<?> type, Level world) {
         super(type, world);
-        this.cachedValidThrustersPos = new HashSet<>();
+        this.cachedAssemblyAreas = new HashSet<>();
         this.platformIdentifier = UUID.randomUUID();
 
+        this.isAssembling = false;
+
         this.lazyTick = 20;
-        this.thrustersPosDirty = true;
+        this.cachedAssemblyAreasDirty = true;
     }
 
     public PlatformSelectionEntity(Level world, AABB boundingBox, UUID platformIdentifier) {
@@ -87,28 +90,28 @@ public class PlatformSelectionEntity extends Entity implements IEntityWithComple
     }
 
     private void lazyTick() {
-        if (!this.thrustersPosDirty)
+        if (!this.cachedAssemblyAreasDirty)
             return;
 
-        this.computeValidThrustersPos();
+        this.computeAssemblyAreas();
     }
 
-    public boolean areCachedThrustersDirty() {
-        return this.thrustersPosDirty;
+    public boolean cachedAssemblyAreasDirty() {
+        return this.cachedAssemblyAreasDirty;
     }
 
-    public void markCachedThrustersAsDirty() {
-        this.thrustersPosDirty = true;
+    public void markCachedAssemblyAreasDirty() {
+        this.cachedAssemblyAreasDirty = true;
     }
 
-    public Set<BlockPos> getCachedValidThrustersPos() {
-        return Set.copyOf(this.cachedValidThrustersPos);
+    public Set<BlockPos> getCachedAssemblyAreas() {
+        return Set.copyOf(this.cachedAssemblyAreas);
     }
 
-    public void computeValidThrustersPos() {
+    public void computeAssemblyAreas() {
         System.out.println("Computing thrusters!");
 
-        this.cachedValidThrustersPos.clear();
+        this.cachedAssemblyAreas.clear();
 
         int y = (int) this.getBoundingBox().minY;
         int minX = (int) Math.floor(this.getBoundingBox().minX);
@@ -136,11 +139,11 @@ public class PlatformSelectionEntity extends Entity implements IEntityWithComple
                 }
 
                 if (valid)
-                    this.cachedValidThrustersPos.add(new BlockPos(x, y, z));
+                    this.cachedAssemblyAreas.add(new BlockPos(x, y, z));
             }
         }
 
-        this.thrustersPosDirty = false;
+        this.cachedAssemblyAreasDirty = false;
     }
 
     @Override
@@ -258,5 +261,13 @@ public class PlatformSelectionEntity extends Entity implements IEntityWithComple
 
     public UUID getPlatformIdentifier() {
         return platformIdentifier;
+    }
+
+    public boolean isAssembling() {
+        return isAssembling;
+    }
+
+    public void setAssembling(boolean assembling) {
+        isAssembling = assembling;
     }
 }

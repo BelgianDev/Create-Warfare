@@ -103,6 +103,10 @@ public class RocketControllerBlockEntity extends SmartBlockEntity {
         return this.cachedSelectionEntity != null && this.cachedSelectionEntity.isAlive();
     }
 
+    public @Nullable PlatformSelectionEntity getPlatformSelectionEntity() {
+        return this.cachedSelectionEntity;
+    }
+
     private void lookForPlatform() {
         if (this.platformIdentifier == null)
             return;
@@ -131,6 +135,8 @@ public class RocketControllerBlockEntity extends SmartBlockEntity {
             return false;
 
         this.updateBlockState(this.getBlockState().cycle(RocketControllerBlock.ASSEMBLING));
+        this.cachedSelectionEntity.setAssembling(!this.cachedSelectionEntity.isAssembling());
+
         return true;
     }
 
@@ -140,10 +146,6 @@ public class RocketControllerBlockEntity extends SmartBlockEntity {
 
         if (!this.toggleAssembly())
             return false;
-
-        this.cachedSelectionEntity.getCachedValidThrustersPos().forEach(pos -> {
-            this.level.setBlock(pos.atY(pos.getY() + 1), Blocks.ANDESITE.defaultBlockState(), Block.UPDATE_ALL);
-        });
 
         return true;
     }

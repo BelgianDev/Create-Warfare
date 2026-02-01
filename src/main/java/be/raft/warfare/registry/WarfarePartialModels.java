@@ -17,7 +17,11 @@ public class WarfarePartialModels {
 
             // Vertical Bulb
             VERTICAL_BULB = block("vertical_bulb/bulb"),
-            VERTICAL_BULB_GLOW = block("vertical_bulb/glow");
+            VERTICAL_BULB_GLOW = block("vertical_bulb/glow"),
+
+            // Overlay
+            ASSEMBLY_OVERLAY = block("overlay/assembling");
+
 
 
     // Some machines and contraption use the same base elements of the create mod

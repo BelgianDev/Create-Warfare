@@ -2,6 +2,7 @@
   "block.warfare.launch_pad": "pɐԀ ɥɔunɐꞀ",
   "block.warfare.mechanical_turret": "ʇǝɹɹn⟘ ןɐɔıuɐɥɔǝW",
   "block.warfare.rocket_controller": "ɹǝןןoɹʇuoƆ ʇǝʞɔoᴚ",
+  "block.warfare.thruster": "ɹǝʇsnɹɥ⟘",
   "death.attack.warfare.bullet": "ǝsǝǝɥɔ ssıʍs oʇuı pǝuɹnʇ sɐʍ %1$s",
   "entity.warfare.bullet": "ʇǝןןnᗺ",
   "entity.warfare.platform": "ɯɹoɟʇɐןԀ",
@@ -21,11 +22,15 @@
   "warfare.rocket_controller.gui.cancel_assembly": "ʎןqɯǝssⱯ ןǝɔuɐƆ",
   "warfare.rocket_controller.gui.close_window": "ʍopuıM ǝsoןƆ",
   "warfare.rocket_controller.gui.enter_assembly": "ʇǝʞɔoᴚ ǝʇɐǝɹƆ",
-  "warfare.rocket_controller.gui.launch": "ʇǝʞɔoᴚ ɥɔunɐꞀ",
+  "warfare.rocket_controller.gui.launch": "ɥɔunɐꞀ",
   "warfare.rocket_controller.intersects": "¡ɯɹoɟʇɐןd ɹǝɥʇouɐ ɥʇıʍ sʇɔǝsɹǝʇuı ɯɹoɟʇɐןd pǝʇɔǝןǝS",
   "warfare.rocket_controller.not_flat": "¡ʇɐןɟ ǝq ʇsnɯ pɐd ɥɔunɐן ǝɥ⟘",
   "warfare.rocket_controller.not_pad": "¡pɐd ɥɔunɐן ɐ ʇɔǝןǝs ʇsnɯ noʎ",
   "warfare.rocket_controller.small": "¡ןןɐɯs ooʇ sı ɯɹoɟʇɐןd pǝʇɔǝןǝS",
   "warfare.rocket_controller.success": "pǝɯɹıɟuoɔ uoıʇɔǝןǝs ɯɹoɟʇɐןԀ",
-  "warfare.rocket_controller.unbound": "¡ɯɹoɟʇɐןd oʇ puıq ʇou pןnoƆ"
+  "warfare.rocket_controller.unbound": "¡ɯɹoɟʇɐןd oʇ puıq ʇou pןnoƆ",
+  "warfare.thruster.invalid_placement": "¡ɯɹoɟʇɐןd ɥɔunɐן ƐxƐ ɐ ɟo ʞɔoןq ɹǝʇuǝɔ ǝɥʇ uo pǝɔɐןd ǝq ʎןuo uɐɔ sɹǝʇsnɹɥ⟘",
+  "warfare.thruster.no_platform": "¡ɯɹoɟʇɐןd pǝɯɹoɟ ɐ uo pǝɔɐןd ǝq ʎןuo uɐɔ ɹǝʇsnɹɥ⟘",
+  "warfare.thruster.not_assembling": "¡pǝןqɯǝssɐ buıǝq ʇou s,ʇɐɥʇ ɯɹoɟʇɐןd ɐ uo sɹǝʇsnɹɥʇ ǝɔɐןd ʇouuɐƆ",
+  "warfare.thruster.not_pad": "¡pɐd ɥɔunɐן ɐ uo pǝɔɐןd ǝq ʎןuo uɐɔ ɹǝʇsnɹɥ⟘"
 }

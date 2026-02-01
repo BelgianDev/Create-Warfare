@@ -1,15 +1,18 @@
-// 1.21.1	2026-01-31T00:34:34.275955914	Registrate Provider for warfare [Registries, Data Maps, Recipes, Advancements, Loot Tables, Tags (blocks), Tags (enchantments), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider]
+// 1.21.1	2026-02-01T02:48:03.490673195	Registrate Provider for warfare [Registries, Data Maps, Recipes, Advancements, Loot Tables, Tags (blocks), Tags (enchantments), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider]
 a645174d26e535e35833a00801c47f0fc8ebeea5 assets/warfare/blockstates/launch_pad.json
 bbb9121228cb44011c661e7d3d927ff42c66f88b assets/warfare/blockstates/mechanical_turret.json
 e04e9371b5c9fd1a7f37b73e0db4d83be306601d assets/warfare/blockstates/rocket_controller.json
-bae1eeb98459a17692d4253d3a3700271a6c528a assets/warfare/lang/en_ud.json
-c13a915b521d225b0276e59877fab87c3ccd578a assets/warfare/lang/en_us.json
+860d0fc7e56f801de2f32b2e76c9c472c4325587 assets/warfare/blockstates/thruster.json
+01553278219d8911e646f300a4ecc0b7b4637fc0 assets/warfare/lang/en_ud.json
+756328123ab22d5d956a21c197b0fe6af75f1331 assets/warfare/lang/en_us.json
 4f4516de0849f1ae9657c9ffdd37efb10cf8a41a assets/warfare/models/item/bullet.json
 82345fff2c60944512ca9c3243f0b360efa21d9c assets/warfare/models/item/launch_pad.json
 ebca13432e893322009d5e7fdaffbadcd289ef19 assets/warfare/models/item/mechanical_turret.json
 2336df8b6a8685bfe2d95503fb74716b82c835a9 assets/warfare/models/item/rocket_controller.json
+f47ab577166e04f87f8d6ec8d8f208cbbe3b78a3 assets/warfare/models/item/thruster.json
 d2c260f1e75e7a5fb9d3f0d934a329b3bf9d06f3 data/minecraft/tags/block/mineable/axe.json
-cd125125a94587cd753578a70fc5f8d2cc72db3b data/minecraft/tags/block/mineable/pickaxe.json
+5450265a3787c7cadc9f7002d70dbdc3dfc6c534 data/minecraft/tags/block/mineable/pickaxe.json
 027784391b97a0c3d72f88c0492aa20844c963f8 data/warfare/loot_table/blocks/launch_pad.json
 2908db8a299c25253b14333cff5e66397473d7b7 data/warfare/loot_table/blocks/mechanical_turret.json
 f0a97ad30ab11183d3a8d22514ba5902229a7787 data/warfare/loot_table/blocks/rocket_controller.json
+2faf5504f3e6cb285a415ab0e28c524659eca251 data/warfare/loot_table/blocks/thruster.json

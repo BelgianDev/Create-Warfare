@@ -44,13 +44,23 @@ public class LaunchPadBlock extends Block implements IWrenchable, ProperWaterlog
     }
 
     private void updateAttachedPlatform(Level level, BlockPos pos) {
+        if (level.isClientSide)
+            System.out.println("Updating on client side!");
+
+        PlatformSelectionEntity platform = this.retrievePlatform(level, pos);
+        if (platform != null)
+            platform.markCachedAssemblyAreasDirty();
+    }
+
+    public @Nullable PlatformSelectionEntity retrievePlatform(Level level, BlockPos pos) {
         List<PlatformSelectionEntity> candidates = level.getEntitiesOfClass(PlatformSelectionEntity.class, new AABB(pos).inflate(3));
         for (PlatformSelectionEntity candidate : candidates) {
             if (candidate.contains(pos)) {
-                candidate.markCachedThrustersAsDirty();
-                return;
+                return candidate;
             }
         }
+
+        return null;
     }
 
     @Override
