@@ -109,8 +109,6 @@ public class PlatformSelectionEntity extends Entity implements IEntityWithComple
     }
 
     public void computeAssemblyAreas() {
-        System.out.println("Computing thrusters!");
-
         this.cachedAssemblyAreas.clear();
 
         int y = (int) this.getBoundingBox().minY;

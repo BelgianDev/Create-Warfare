@@ -1,11 +1,13 @@
 package be.raft.warfare.block;
 
 import be.raft.warfare.entity.PlatformSelectionEntity;
+import be.raft.warfare.network.S2C.PlatformDirtyCachePacket;
 import be.raft.warfare.registry.WarfareShapes;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -18,6 +20,7 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,12 +47,12 @@ public class LaunchPadBlock extends Block implements IWrenchable, ProperWaterlog
     }
 
     private void updateAttachedPlatform(Level level, BlockPos pos) {
-        if (level.isClientSide)
-            System.out.println("Updating on client side!");
-
         PlatformSelectionEntity platform = this.retrievePlatform(level, pos);
-        if (platform != null)
-            platform.markCachedAssemblyAreasDirty();
+        if (platform == null)
+            return;
+
+        platform.markCachedAssemblyAreasDirty();
+        PacketDistributor.sendToPlayersTrackingChunk((ServerLevel) level, level.getChunkAt(pos).getPos(), new PlatformDirtyCachePacket(platform.getId()));
     }
 
     public @Nullable PlatformSelectionEntity retrievePlatform(Level level, BlockPos pos) {

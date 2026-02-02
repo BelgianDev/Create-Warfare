@@ -21,6 +21,5 @@ public class WarfareCreativeTabs {
 
     public static void register(@NotNull IEventBus bus) {
         REGISTER.register(bus);
-        System.out.println("Registered!");
     }
 }

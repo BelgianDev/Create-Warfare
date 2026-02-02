@@ -44,6 +44,8 @@ public class MechanicalTurretBlockEntity extends TurretBlockEntity<LivingEntity>
     public final LerpedFloat baseAngle;
     public final LerpedFloat headAngle;
 
+    private int shootingTick;
+
     // Client Only (Visual)
     public final LerpedFloat nozzleLeftScale;
     public final LerpedFloat nozzleRightScale;
@@ -62,6 +64,8 @@ public class MechanicalTurretBlockEntity extends TurretBlockEntity<LivingEntity>
 
         this.targetBaseAngle = 0;
         this.targetHeadAngle = 0;
+
+        this.shootingTick = 5;
 
         this.baseAngle = LerpedFloat.angular();
         this.headAngle = LerpedFloat.angular();
@@ -187,6 +191,11 @@ public class MechanicalTurretBlockEntity extends TurretBlockEntity<LivingEntity>
 
     @Override
     public void shoot() {
+        this.shootingTick--;
+        if (this.shootingTick > 0)
+            return;
+
+        this.shootingTick = 5;
         if (this.level.isClientSide) {
             Vec3 leftNozzle = this.getNozzlePosition(true);
             Vec3 rightNozzle = this.getNozzlePosition(false);
