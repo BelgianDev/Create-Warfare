@@ -9,6 +9,7 @@ import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
 public class TurretRenderer extends KineticBlockEntityRenderer<MechanicalTurretBlockEntity> {
 
@@ -22,7 +23,7 @@ public class TurretRenderer extends KineticBlockEntityRenderer<MechanicalTurretB
     }
 
     @Override
-    public boolean shouldRenderOffScreen(MechanicalTurretBlockEntity blockEntity) {
+    public boolean shouldRenderOffScreen(@NotNull MechanicalTurretBlockEntity blockEntity) {
         return true;
     }
 

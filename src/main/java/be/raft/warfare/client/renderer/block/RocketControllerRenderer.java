@@ -22,6 +22,9 @@ import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 
 public class RocketControllerRenderer extends SafeBlockEntityRenderer<RocketControllerBlockEntity> {
     private static final Vec3i PASSIVE = new Vec3i(100, 255, 170);
@@ -36,13 +39,18 @@ public class RocketControllerRenderer extends SafeBlockEntityRenderer<RocketCont
     }
 
     @Override
-    public boolean shouldRenderOffScreen(RocketControllerBlockEntity blockEntity) {
+    public boolean shouldRenderOffScreen(@NotNull RocketControllerBlockEntity blockEntity) {
         return true;
     }
 
     @Override
     public int getViewDistance() {
         return 96 * 2;
+    }
+
+    @Override
+    public @NotNull AABB getRenderBoundingBox(@NotNull RocketControllerBlockEntity blockEntity) {
+        return AABB.INFINITE;
     }
 
     @Override
