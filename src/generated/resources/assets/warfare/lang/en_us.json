@@ -2,6 +2,7 @@
   "block.warfare.launch_pad": "Launch Pad",
   "block.warfare.mechanical_turret": "Mechanical Turret",
   "block.warfare.rocket_controller": "Rocket Controller",
+  "block.warfare.thruster": "Thruster",
   "death.attack.warfare.bullet": "%1$s was turned into swiss cheese",
   "entity.warfare.bullet": "Bullet",
   "entity.warfare.platform": "Platform",

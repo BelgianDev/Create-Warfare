@@ -4,10 +4,13 @@ import be.raft.warfare.CreateWarfare;
 import be.raft.warfare.block.LaunchPadBlock;
 import be.raft.warfare.block.MechanicalTurretBlock;
 import be.raft.warfare.block.RocketControllerBlock;
+import be.raft.warfare.block.ThrusterBlock;
 import be.raft.warfare.item.RocketControllerBlockItem;
+import be.raft.warfare.item.ThrusterBlockItem;
 import com.simibubi.create.foundation.data.*;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.material.MapColor;
 import net.neoforged.neoforge.client.model.generators.ConfiguredModel;
@@ -53,6 +56,15 @@ public class WarfareBlocks {
             .transform(TagGen.pickaxeOnly())
             .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(), AssetLookup.standardModel(ctx, prov)))
             .item(BlockItem::new).build()
+            .register();
+
+    public static final BlockEntry<ThrusterBlock> THRUSTER_BLOCK = REGISTRATE.block("thruster", ThrusterBlock::new)
+            .initialProperties(SharedProperties::softMetal)
+            .properties(prop -> prop.mapColor(MapColor.TERRACOTTA_GRAY).noOcclusion())
+            .transform(TagGen.pickaxeOnly())
+            .blockstate((ctx, prov) -> prov.simpleBlock(ctx.getEntry(), AssetLookup.partialBaseModel(ctx, prov)))
+            .item(ThrusterBlockItem::new)
+            .transform(customItemModel())
             .register();
 
     public static void register() {}

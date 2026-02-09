@@ -1,13 +1,21 @@
 package be.raft.warfare.block;
 
 import be.raft.warfare.entity.PlatformSelectionEntity;
+import be.raft.warfare.item.ThrusterBlockItem;
 import be.raft.warfare.network.S2C.PlatformDirtyCachePacket;
+import be.raft.warfare.registry.WarfareBlocks;
 import be.raft.warfare.registry.WarfareShapes;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -18,6 +26,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.network.PacketDistributor;
@@ -64,6 +73,51 @@ public class LaunchPadBlock extends Block implements IWrenchable, ProperWaterlog
         }
 
         return null;
+    }
+
+    @Override
+    protected @NotNull ItemInteractionResult useItemOn(@NotNull ItemStack stack, @NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
+        if (level.isClientSide)
+            return ItemInteractionResult.SUCCESS;
+
+        if (player.isShiftKeyDown())
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+
+        ItemStack item = player.getItemInHand(hand);
+        if (!(item.getItem() instanceof ThrusterBlockItem thrusterItem))
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+
+        PlatformSelectionEntity platform = this.retrievePlatform(level, pos);
+        if (platform == null || platform.isAssembling())
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+
+        if (platform.cachedAssemblyAreasDirty())
+            platform.computeAssemblyAreas();
+
+        if (!platform.getCachedAssemblyAreas().contains(pos))
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+
+        BlockPos thrusterPos = pos.above();
+        BlockState oldBlock = level.getBlockState(thrusterPos);
+
+        if (!oldBlock.isAir()) {
+            if (level.getBlockState(thrusterPos).getDestroySpeed(level, thrusterPos) == -1)
+                return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+
+            level.destroyBlock(thrusterPos, true);
+        }
+
+        SoundEvent sound = thrusterItem.getPlaceSound(thrusterItem.getBlock().defaultBlockState(), level, thrusterPos, player);
+        level.setBlock(thrusterPos, thrusterItem.getBlock().defaultBlockState(), Block.UPDATE_ALL);
+        level.playSound(null, thrusterPos, sound, SoundSource.BLOCKS, 1, 1);
+
+        if (!player.isCreative()) {
+            item.shrink(1);
+            if (item.isEmpty())
+                player.setItemInHand(hand, ItemStack.EMPTY);
+        }
+
+        return ItemInteractionResult.SUCCESS;
     }
 
     @Override
