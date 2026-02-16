@@ -1,18 +1,24 @@
-// 1.21.1	2026-02-03T22:32:55.990249506	Registrate Provider for warfare [Registries, Data Maps, Recipes, Advancements, Loot Tables, Tags (blocks), Tags (enchantments), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider]
+// 1.21.1	2026-02-16T21:20:22.880534124	Registrate Provider for warfare [Registries, Data Maps, Recipes, Advancements, Loot Tables, Tags (blocks), Tags (enchantments), Tags (items), Tags (fluids), Tags (entity_types), generic_server_provider, Blockstates, Item models, Lang (en_us/en_ud), generic_client_provider]
 a645174d26e535e35833a00801c47f0fc8ebeea5 assets/warfare/blockstates/launch_pad.json
 bbb9121228cb44011c661e7d3d927ff42c66f88b assets/warfare/blockstates/mechanical_turret.json
 e04e9371b5c9fd1a7f37b73e0db4d83be306601d assets/warfare/blockstates/rocket_controller.json
+143fc3cc79000c6d7bd06c1c6e847a53c9abeb9d assets/warfare/blockstates/shield_coil.json
+34c0effb6cf426b7577f6aa188890e248e48f3d5 assets/warfare/blockstates/shield_controller.json
 860d0fc7e56f801de2f32b2e76c9c472c4325587 assets/warfare/blockstates/thruster.json
-01553278219d8911e646f300a4ecc0b7b4637fc0 assets/warfare/lang/en_ud.json
-756328123ab22d5d956a21c197b0fe6af75f1331 assets/warfare/lang/en_us.json
+c69f5933fac5f9ab376325a6d7367619b5ee1996 assets/warfare/lang/en_ud.json
+af6b7316328145bcc06055e964dca14ef1e1d757 assets/warfare/lang/en_us.json
 4f4516de0849f1ae9657c9ffdd37efb10cf8a41a assets/warfare/models/item/bullet.json
 82345fff2c60944512ca9c3243f0b360efa21d9c assets/warfare/models/item/launch_pad.json
 ebca13432e893322009d5e7fdaffbadcd289ef19 assets/warfare/models/item/mechanical_turret.json
 2336df8b6a8685bfe2d95503fb74716b82c835a9 assets/warfare/models/item/rocket_controller.json
+f4d0536e55d9a1c997607d097315582862b600ed assets/warfare/models/item/shield_coil.json
+d9762300129ae74fb03290e01ee5a508cfc5549f assets/warfare/models/item/shield_controller.json
 f47ab577166e04f87f8d6ec8d8f208cbbe3b78a3 assets/warfare/models/item/thruster.json
-d2c260f1e75e7a5fb9d3f0d934a329b3bf9d06f3 data/minecraft/tags/block/mineable/axe.json
-5450265a3787c7cadc9f7002d70dbdc3dfc6c534 data/minecraft/tags/block/mineable/pickaxe.json
+60129ee35b1e8f1eb8cd623a66bc5841d3510bf5 data/minecraft/tags/block/mineable/axe.json
+346f2c10e677ce7f197e67af0561753d315e9ebf data/minecraft/tags/block/mineable/pickaxe.json
 027784391b97a0c3d72f88c0492aa20844c963f8 data/warfare/loot_table/blocks/launch_pad.json
 2908db8a299c25253b14333cff5e66397473d7b7 data/warfare/loot_table/blocks/mechanical_turret.json
 f0a97ad30ab11183d3a8d22514ba5902229a7787 data/warfare/loot_table/blocks/rocket_controller.json
+803c73fcff16eb6f96313ce0ecc47e0a31e63705 data/warfare/loot_table/blocks/shield_coil.json
+80ef85edefec168aa9117c121e65ea5d2c20fb41 data/warfare/loot_table/blocks/shield_controller.json
 2faf5504f3e6cb285a415ab0e28c524659eca251 data/warfare/loot_table/blocks/thruster.json

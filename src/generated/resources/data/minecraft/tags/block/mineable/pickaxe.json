@@ -3,6 +3,8 @@
     "warfare:mechanical_turret",
     "warfare:rocket_controller",
     "warfare:launch_pad",
-    "warfare:thruster"
+    "warfare:thruster",
+    "warfare:shield_coil",
+    "warfare:shield_controller"
   ]
 }

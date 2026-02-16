@@ -15,6 +15,9 @@ public class WarfarePartialModels {
             TURRET_HEAD = block("mechanical_turret/head"),
             TURRET_NOZZLE = block("mechanical_turret/nozzle"),
 
+            // Shield Coil
+            SHIELD_COIL = block("shield_coil/coil"),
+
             // Vertical Bulb
             VERTICAL_BULB = block("vertical_bulb/bulb"),
             VERTICAL_BULB_GLOW = block("vertical_bulb/glow"),

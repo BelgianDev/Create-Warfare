@@ -18,6 +18,18 @@ public class WarfareShapes {
                     .build(),
 
             LAUNCH_PAD = shape(0, 0, 0, 16, 7, 16)
+                    .build(),
+
+            SHIELD_COIL = shape(3, 1, 3, 13, 15, 13)
+                    .add(5, 0, 0, 11, 16, 2)
+                    .add(0, 0, 5, 2, 16, 11)
+                    .add(5, 0, 14, 11, 16, 16)
+                    .add(14, 0, 5, 16, 16, 11)
+                    .build(),
+
+            SHIELD_CONTROLLER = shape(0, 0, 0, 16, 4, 16)
+                    .add(1, 5, 1, 15, 10, 15)
+                    .add(0, 10, 0, 16, 16, 16)
                     .build();
 
 
