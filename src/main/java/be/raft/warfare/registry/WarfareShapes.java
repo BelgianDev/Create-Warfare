@@ -28,7 +28,7 @@ public class WarfareShapes {
                     .build(),
 
             SHIELD_CONTROLLER = shape(0, 0, 0, 16, 4, 16)
-                    .add(1, 5, 1, 15, 10, 15)
+                    .add(1, 4, 1, 15, 10, 15)
                     .add(0, 10, 0, 16, 16, 16)
                     .build();
 

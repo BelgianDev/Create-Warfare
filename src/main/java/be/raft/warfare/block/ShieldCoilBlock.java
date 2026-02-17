@@ -7,6 +7,7 @@ import com.simibubi.create.content.kinetics.simpleRelays.AbstractSimpleShaftBloc
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -21,6 +22,11 @@ public class ShieldCoilBlock extends AbstractSimpleShaftBlock {
     @Override
     protected @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         return WarfareShapes.SHIELD_COIL;
+    }
+
+    @Override
+    public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
+        return face.getAxis().isVertical();
     }
 
     @Override

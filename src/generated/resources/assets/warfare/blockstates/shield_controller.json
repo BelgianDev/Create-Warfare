@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "warfare:block/shield_controller/block",
+      "y": 90
+    },
+    "axis=z": {
+      "model": "warfare:block/shield_controller/block"
+    }
+  }
+}

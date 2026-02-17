@@ -7,6 +7,7 @@ import com.simibubi.create.content.kinetics.base.KineticBlockEntityVisual;
 import com.simibubi.create.content.kinetics.base.RotatingInstance;
 import com.simibubi.create.foundation.render.AllInstanceTypes;
 import dev.engine_room.flywheel.api.instance.Instance;
+import dev.engine_room.flywheel.api.instance.Instancer;
 import dev.engine_room.flywheel.api.visualization.VisualizationContext;
 import dev.engine_room.flywheel.lib.instance.AbstractInstance;
 import dev.engine_room.flywheel.lib.instance.FlatLit;
@@ -25,25 +26,30 @@ public class ShieldControllerVisual extends KineticBlockEntityVisual<ShieldContr
 
         Direction.Axis axis = blockEntity.getBlockState().getValue(HorizontalAxisKineticBlock.HORIZONTAL_AXIS);
 
-        var instancer = instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(AllPartialModels.SHAFT_HALF));
+        Instancer<RotatingInstance> instancer = instancerProvider().instancer(AllInstanceTypes.ROTATING, Models.partial(AllPartialModels.SHAFT_HALF));
         for (Direction facing : Direction.values()) {
-            if (facing == Direction.DOWN)
-                continue;
-
             final Direction.Axis dirAxis = facing.getAxis();
-            if (axis == dirAxis) {
+            if (axis != dirAxis || facing.getAxis().isVertical())
                 continue;
-            }
 
             RotatingInstance instance = instancer.createInstance();
 
-            instance.setup(blockEntity, axis, this.blockEntity.getSpeed())
+            instance.setup(this.blockEntity, axis, this.blockEntity.getSpeed())
                     .setPosition(getVisualPosition())
                     .rotateToFace(Direction.SOUTH, facing)
                     .setChanged();
 
             instances.put(facing, instance);
         }
+
+        // Top
+        RotatingInstance instance = instancer.createInstance();
+        instance.setup(this.blockEntity, Direction.UP.getAxis(), this.blockEntity.getSpeed())
+                .setPosition(getVisualPosition())
+                .rotateToFace(Direction.SOUTH, Direction.UP)
+                .setChanged();
+
+        instances.put(Direction.UP, instance);
     }
 
     @Override

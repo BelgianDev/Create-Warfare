@@ -24,15 +24,6 @@ public class ShieldControllerBlock extends HorizontalAxisKineticBlock implements
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        Direction.Axis preferredAxis = getPreferredHorizontalAxis(context);
-        if (preferredAxis != null)
-            return this.defaultBlockState().setValue(HORIZONTAL_AXIS, preferredAxis == Direction.Axis.X ? Direction.Axis.Z : Direction.Axis.X);
-
-        return this.defaultBlockState().setValue(HORIZONTAL_AXIS, context.getHorizontalDirection().getClockWise().getAxis());
-    }
-
-    @Override
     public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter worldIn, @NotNull BlockPos pos, @NotNull CollisionContext context) {
         return WarfareShapes.SHIELD_CONTROLLER;
     }
@@ -49,6 +40,6 @@ public class ShieldControllerBlock extends HorizontalAxisKineticBlock implements
 
     @Override
     public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
-        return face.getAxis() != state.getValue(HORIZONTAL_AXIS) && face != Direction.DOWN;
+        return face.getAxis() == state.getValue(HORIZONTAL_AXIS) || face == Direction.UP;
     }
 }
