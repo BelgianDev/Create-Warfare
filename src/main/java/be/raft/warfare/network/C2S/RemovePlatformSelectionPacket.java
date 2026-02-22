@@ -12,11 +12,10 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 
 public record RemovePlatformSelectionPacket(int entityId) implements ServerboundPacketPayload {
-    public static final StreamCodec<ByteBuf, RemovePlatformSelectionPacket> CODEC = StreamCodec.composite(
+    public static final StreamCodec<ByteBuf, RemovePlatformSelectionPacket> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.INT, RemovePlatformSelectionPacket::entityId,
             RemovePlatformSelectionPacket::new
     );

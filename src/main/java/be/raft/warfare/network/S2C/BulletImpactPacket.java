@@ -19,7 +19,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
 
 public record BulletImpactPacket(@NotNull BlockPos pos, @NotNull Direction face, float faceX, float faceY) implements ClientboundPacketPayload {
-    public static final StreamCodec<ByteBuf, BulletImpactPacket> CODEC = StreamCodec.composite(
+    public static final StreamCodec<ByteBuf, BulletImpactPacket> STREAM_CODEC = StreamCodec.composite(
             BlockPos.STREAM_CODEC, BulletImpactPacket::pos,
             Direction.STREAM_CODEC, BulletImpactPacket::face,
             ByteBufCodecs.BYTE, BulletImpactPacket::faceXAsByte,

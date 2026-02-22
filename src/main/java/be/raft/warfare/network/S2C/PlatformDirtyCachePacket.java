@@ -11,7 +11,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 
 public record PlatformDirtyCachePacket(int entityId) implements ClientboundPacketPayload {
-    public static final StreamCodec<ByteBuf, PlatformDirtyCachePacket> CODEC = StreamCodec.composite(
+    public static final StreamCodec<ByteBuf, PlatformDirtyCachePacket> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.INT, PlatformDirtyCachePacket::entityId,
             PlatformDirtyCachePacket::new
     );

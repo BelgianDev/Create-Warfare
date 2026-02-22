@@ -1,10 +1,8 @@
 package be.raft.warfare.network.C2S;
 
-import be.raft.warfare.CreateWarfare;
 import be.raft.warfare.entity.PlatformSelectionEntity;
 import be.raft.warfare.registry.WarfareBlocks;
 import be.raft.warfare.registry.WarfareDataComponents;
-import be.raft.warfare.registry.WarfareItems;
 import be.raft.warfare.registry.WarfarePackets;
 import be.raft.warfare.rocket.platform.RocketPlatformSelectionHelper;
 import com.simibubi.create.content.contraptions.glue.SuperGlueEntity;
@@ -14,7 +12,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
@@ -23,7 +20,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.UUID;
 
 public record CreatePlatformSelectionPacket(BlockPos from, BlockPos to) implements ServerboundPacketPayload {
-    public static final StreamCodec<ByteBuf, CreatePlatformSelectionPacket> CODEC = StreamCodec.composite(
+    public static final StreamCodec<ByteBuf, CreatePlatformSelectionPacket> STREAM_CODEC = StreamCodec.composite(
             BlockPos.STREAM_CODEC, CreatePlatformSelectionPacket::from,
             BlockPos.STREAM_CODEC, CreatePlatformSelectionPacket::to,
             CreatePlatformSelectionPacket::new
