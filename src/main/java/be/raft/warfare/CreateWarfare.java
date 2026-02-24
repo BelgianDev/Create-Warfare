@@ -2,6 +2,7 @@ package be.raft.warfare;
 
 import be.raft.warfare.registry.*;
 import be.raft.warfare.data.WarfareDataGen;
+import be.raft.warfare.shield.ShieldManager;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
@@ -31,6 +32,8 @@ public class CreateWarfare {
     public CreateWarfare(IEventBus bus, ModContainer container) {
         WarfareCreativeTabs.register(bus);
         REGISTRATE.registerEventListeners(bus);
+
+        ShieldManager.initialize();
 
         WarfarePartialModels.prepare();
         WarfareBlockEntities.register(bus);

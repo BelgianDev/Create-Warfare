@@ -21,4 +21,6 @@ public record ShieldEntry(BlockPos origin, AABB boundingBox) {
     public ShieldEntry(BlockPos pos, Vec3 from, Vec3 to) {
         this(pos, new AABB(from, to));
     }
+
+
 }

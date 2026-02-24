@@ -1,14 +1,23 @@
 package be.raft.warfare.shield;
 
+import be.raft.warfare.network.S2C.ShieldUpdatePacket;
 import net.createmod.catnip.data.WorldAttached;
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.datafix.DataFixTypes;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.level.ChunkWatchEvent;
+
+import java.util.List;
 
 /**
  * Server and client side component keeps shields and syncs them across the network.
  */
+
 public class ShieldManager {
     private static final WorldAttached<ShieldStore> STORES = new WorldAttached<>(ShieldManager::createStore);
 
@@ -22,5 +31,28 @@ public class ShieldManager {
 
     public static ShieldStore getStore(LevelAccessor level) {
         return STORES.get(level);
+    }
+
+    public static void initialize() {
+        NeoForge.EVENT_BUS.addListener(ShieldManager::onChunkSent);
+        NeoForge.EVENT_BUS.addListener(ShieldManager::onChunkDropped);
+    }
+
+    private static void onChunkSent(ChunkWatchEvent.Sent event) {
+        ShieldStore store = ShieldManager.getStore(event.getLevel());
+        List<ShieldEntry> shields = store.getShieldsInChunk(event.getPos());
+
+        for (ShieldEntry shield : shields) {
+            CatnipServices.NETWORK.sendToClient(event.getPlayer(), ShieldUpdatePacket.addOrUpdate(shield));
+        }
+    }
+
+    private static void onChunkDropped(ChunkWatchEvent.UnWatch event) {
+        ShieldStore store = ShieldManager.getStore(event.getLevel());
+        List<ShieldEntry> shields = store.getShieldsInChunk(event.getPos());
+
+        for (ShieldEntry shield : shields) {
+            CatnipServices.NETWORK.sendToClient(event.getPlayer(), ShieldUpdatePacket.remove(shield));
+        }
     }
 }
