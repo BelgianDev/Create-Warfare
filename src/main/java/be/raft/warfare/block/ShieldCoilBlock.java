@@ -61,4 +61,9 @@ public class ShieldCoilBlock extends AbstractSimpleShaftBlock {
     public BlockEntityType<? extends KineticBlockEntity> getBlockEntityType() {
         return WarfareBlockEntities.SHIELD_COIL.get();
     }
+
+    @Override
+    public SpeedLevel getMinimumRequiredSpeedLevel() {
+        return SpeedLevel.MEDIUM;
+    }
 }

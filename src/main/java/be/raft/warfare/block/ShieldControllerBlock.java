@@ -72,4 +72,9 @@ public class ShieldControllerBlock extends HorizontalAxisKineticBlock implements
     public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
         return face.getAxis() == state.getValue(HORIZONTAL_AXIS) || face == Direction.UP;
     }
+
+    @Override
+    public SpeedLevel getMinimumRequiredSpeedLevel() {
+        return SpeedLevel.FAST;
+    }
 }

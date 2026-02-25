@@ -1,24 +1,34 @@
 package be.raft.warfare.block.entity;
 
+import be.raft.warfare.shield.ShieldEntry;
+import be.raft.warfare.shield.ShieldManager;
+import be.raft.warfare.shield.ShieldStore;
+import com.simibubi.create.content.kinetics.KineticNetwork;
 import com.simibubi.create.content.kinetics.base.DirectionalShaftHalvesBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 
 import java.util.function.Consumer;
 
 public class ShieldControllerBlockEntity extends DirectionalShaftHalvesBlockEntity {
-    private static final int MAX_COIL_HEIGHT = 16; // TODO: Replace with a config option.
+    // TODO: Replace with a config options.
+    private static final int MAX_COIL_HEIGHT = 16;
+    private static final int RANGE_PER_COIL = 32;
+    private static final int BASE_STRESS = 10240 / 64;
 
     private int coilHeight;
     private boolean coilDirty;
 
     public ShieldControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
+
         this.setLazyTickRate(10);
     }
 
@@ -46,7 +56,6 @@ public class ShieldControllerBlockEntity extends DirectionalShaftHalvesBlockEnti
     @Override
     public void tick() {
         super.tick();
-
     }
 
     @Override
@@ -61,11 +70,12 @@ public class ShieldControllerBlockEntity extends DirectionalShaftHalvesBlockEnti
 
     @Override
     public void onSpeedChanged(float previousSpeed) {
-        float speed = this.getSpeed();
+        super.onSpeedChanged(previousSpeed);
 
-        if (speed == 0) {
+        if (this.isSpeedRequirementFulfilled())
+            this.activateShield();
+        else
             this.deactivateShield();
-        }
     }
 
     public void markCoilDirty() {
@@ -79,11 +89,31 @@ public class ShieldControllerBlockEntity extends DirectionalShaftHalvesBlockEnti
 
     private void activateShield() {
         this.executeOnCoils(ShieldCoilBlockEntity::activate);
+
+        if (this.level.isClientSide)
+            return;
+
+        AABB boundingBox = new AABB(this.getBlockPos()).inflate(this.coilHeight * RANGE_PER_COIL);
+        ShieldEntry shield = new ShieldEntry(this.getBlockPos(), boundingBox);
+
+        ShieldManager.getStore(this.level).add(shield, (ServerLevel) this.level);
+    }
+
+    @Override
+    public float calculateStressApplied() {
+        if (this.coilHeight == 0) {
+            this.lastStressApplied = 1;
+            return 1;
+        }
+
+        float impact = (float) (BASE_STRESS * this.coilHeight); // TODO: Change for an expontential formula.
+        this.lastStressApplied = impact;
+        return impact;
     }
 
     private void executeOnCoils(Consumer<ShieldCoilBlockEntity> consumer) {
-        for (int i = 1; i < this.coilHeight; i++) {
-            ShieldCoilBlockEntity coil = (ShieldCoilBlockEntity) this.level.getBlockEntity(this.getBlockPos().above(i));
+        for (int i = 0; i < this.coilHeight; i++) {
+            ShieldCoilBlockEntity coil = (ShieldCoilBlockEntity) this.level.getBlockEntity(this.getBlockPos().above(i + 1));
             consumer.accept(coil);
         }
     }
@@ -115,11 +145,20 @@ public class ShieldControllerBlockEntity extends DirectionalShaftHalvesBlockEnti
             if (be instanceof ShieldControllerBlockEntity) {
                 break; // If another controller is on top, we don't want to mess with its coils.
             }
-        }
+         }
 
         if (!endReached)
             this.coilHeight = MAX_COIL_HEIGHT;
 
         this.notifyUpdate();
+        this.notifyNetwork();
+    }
+
+    private void notifyNetwork() {
+        if (!this.hasNetwork() || this.speed == 0)
+            return;
+
+        KineticNetwork network = this.getOrCreateNetwork();
+        network.updateStressFor(this, calculateStressApplied());
     }
 }

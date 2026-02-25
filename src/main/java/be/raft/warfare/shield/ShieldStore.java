@@ -1,5 +1,6 @@
 package be.raft.warfare.shield;
 
+import be.raft.warfare.network.S2C.ShieldUpdatePacket;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
@@ -10,11 +11,14 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.network.PacketDistributor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -57,7 +61,7 @@ public class ShieldStore extends SavedData {
         this.rebuildChunkIndexes();
     }
 
-    public void add(ShieldEntry entry) {
+    public void add(ShieldEntry entry, ServerLevel level) {
         this.shields.add(entry);
 
         this.setDirty();
