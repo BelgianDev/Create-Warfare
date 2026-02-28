@@ -1,6 +1,6 @@
 package be.raft.warfare.block.entity;
 
-import be.raft.warfare.shield.ShieldEntry;
+import be.raft.warfare.shield.Shield;
 import be.raft.warfare.shield.ShieldManager;
 import be.raft.warfare.shield.ShieldStore;
 import com.simibubi.create.content.kinetics.KineticNetwork;
@@ -9,11 +9,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -21,7 +21,9 @@ public class ShieldControllerBlockEntity extends DirectionalShaftHalvesBlockEnti
     // TODO: Replace with a config options.
     private static final int MAX_COIL_HEIGHT = 16;
     private static final int RANGE_PER_COIL = 32;
-    private static final int BASE_STRESS = 10240 / 64;
+    private static final int BASE_STRESS = 10240;
+
+    private Shield shield;
 
     private int coilHeight;
     private boolean coilDirty;
@@ -29,6 +31,7 @@ public class ShieldControllerBlockEntity extends DirectionalShaftHalvesBlockEnti
     public ShieldControllerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
 
+        this.shield = new Shield(pos, new AABB(pos));
         this.setLazyTickRate(10);
     }
 
@@ -40,13 +43,23 @@ public class ShieldControllerBlockEntity extends DirectionalShaftHalvesBlockEnti
     }
 
     @Override
+    protected void loadAdditional(@NotNull CompoundTag tag, HolderLookup.@NotNull Provider registries) {
+        super.loadAdditional(tag, registries);
+    }
+
+    @Override
     protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(compound, registries, clientPacket);
 
         this.coilHeight = compound.getInt("coilHeight");
 
-        if (!clientPacket)
-            this.markCoilDirty();
+        if (clientPacket)
+            return;
+
+        ShieldStore store = ShieldManager.getStore(this.level);
+        this.shield = store.get(this.getBlockPos());
+
+        this.markCoilDirty();
     }
 
     public int getCoilHeight() {
@@ -92,11 +105,6 @@ public class ShieldControllerBlockEntity extends DirectionalShaftHalvesBlockEnti
 
         if (this.level.isClientSide)
             return;
-
-        AABB boundingBox = new AABB(this.getBlockPos()).inflate(this.coilHeight * RANGE_PER_COIL);
-        ShieldEntry shield = new ShieldEntry(this.getBlockPos(), boundingBox);
-
-        ShieldManager.getStore(this.level).add(shield, (ServerLevel) this.level);
     }
 
     @Override
@@ -106,7 +114,7 @@ public class ShieldControllerBlockEntity extends DirectionalShaftHalvesBlockEnti
             return 1;
         }
 
-        float impact = (float) (BASE_STRESS * this.coilHeight); // TODO: Change for an expontential formula.
+        float impact = (float) (BASE_STRESS * Math.pow(1.4f, this.coilHeight - 1)) / Math.abs(this.speed);
         this.lastStressApplied = impact;
         return impact;
     }
